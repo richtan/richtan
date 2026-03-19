@@ -86,7 +86,7 @@ def _render_card_lines(repo, inner_width=35):
         display_name = name
 
     truncated_name = visual_truncate(display_name, 30)
-    name_link = f'<a href="{url}">{truncated_name}</a>'
+    name_link = f'<a href="{url}"><b>{truncated_name}</b></a>'
     lines.append(content_line(name_link))
 
     # Description lines (2 max)
@@ -120,7 +120,7 @@ def _render_card_lines(repo, inner_width=35):
     if stars:
         right_parts.append(f'★ {stars}')
     if forks:
-        right_parts.append(f'forks: {forks}')
+        right_parts.append(f'⑂ {forks}')
     right_text = '  '.join(right_parts)
 
     if lang_name and right_text:
