@@ -1,29 +1,29 @@
 <!-- PROFILE START -->
-<!-- hash:40e77b93b29bb69a -->
+<!-- hash:18eeb78b26dc44a4 -->
 <pre>┌─────────────────────────────────────┐  ┌─────────────────────────────────────┐
-│ <a href="https://github.com/PurdueRCAC/OOD-Dashboard">PurdueRCAC/OOD-Dashboard</a>            │  │ <a href="https://github.com/richtan/ouro">ouro</a>                                │
+│ <a href="https://github.com/PurdueRCAC/OOD-Dashboard"><b>PurdueRCAC/OOD-Dashboard</b></a>            │  │ <a href="https://github.com/richtan/ouro"><b>ouro</b></a>                                │
 │ An improved Open OnDemand dashboard │  │ Pay for compute over HTTP. No       │
 │ for HPC clusters                    │  │ accounts. Just USDC.                │
 │                                     │  │                                     │
-│ JavaScript           ★ 12  forks: 1 │  │ Python                              │
+│ JavaScript                ★ 12  ⑂ 1 │  │ Python                              │
 └─────────────────────────────────────┘  └─────────────────────────────────────┘
 ┌─────────────────────────────────────┐  ┌─────────────────────────────────────┐
-│ <a href="https://github.com/richtan/pdfnotes">pdfnotes</a>                            │  │ <a href="https://github.com/richtan/relayer">relayer</a>                             │
+│ <a href="https://github.com/richtan/pdfnotes"><b>pdfnotes</b></a>                            │  │ <a href="https://github.com/richtan/relayer"><b>relayer</b></a>                             │
 │ Analyze your PDFs with AI built-in  │  │ The physical layer for AI agents    │
 │                                     │  │                                     │
 │                                     │  │                                     │
 │ TypeScript                          │  │ Solidity                            │
 └─────────────────────────────────────┘  └─────────────────────────────────────┘
 ┌─────────────────────────────────────┐  ┌─────────────────────────────────────┐
-│ <a href="https://github.com/richtan/HandsOff">HandsOff</a>                            │  │ <a href="https://github.com/richtan/Git-Improved">Git-Improved</a>                        │
-│ Improve your productivity through   │  │ A human-friendly git tool powered   │
-│ hands-free laptop control           │  │ by AI                               │
+│ <a href="https://github.com/richtan/HandsOff"><b>HandsOff</b></a>                            │  │ <a href="https://github.com/richtan/richtan"><b>richtan</b></a>                             │
+│ Improve your productivity through   │  │ My GitHub profile README            │
+│ hands-free laptop control           │  │                                     │
 │                                     │  │                                     │
 │ Python                              │  │ Python                              │
 └─────────────────────────────────────┘  └─────────────────────────────────────┘
 
 
-  887 contributions in the last year
+  888 contributions in the last year
 
        Apr May  Jun Jul Aug  Sep Oct Nov  Dec Jan  Feb Mar
       ··░▓▒·▓▓░··░▒░·░·····░·░·····░·░░·░░▒····░░░░░···▓█·
@@ -77,6 +77,6 @@ Fri  █····█··░░··▒░···░·····░·····░▒·�
     └─ <a href="https://github.com/richtan/Simple-Text-Editor">richtan/Simple-Text-Editor</a>
 
 
-  Last updated: 2026-03-19 22:12 UTC
+  Last updated: 2026-03-19 22:20 UTC
 </pre>
 <!-- PROFILE END -->
