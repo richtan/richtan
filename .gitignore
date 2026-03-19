@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.env
+.README.md.tmp
+*.tmp
+node_modules/
+.wrangler/

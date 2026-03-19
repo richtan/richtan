@@ -1,0 +1,14 @@
+name = "profile-webhook"
+main = "src/index.js"
+compatibility_date = "2025-01-01"
+
+[[durable_objects.bindings]]
+name = "DEBOUNCER"
+class_name = "ProfileDebounce"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["ProfileDebounce"]
+
+[triggers]
+crons = ["0 */12 * * *"]

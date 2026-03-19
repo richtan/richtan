@@ -1,0 +1,54 @@
+name: Update Profile
+on:
+  schedule:
+    - cron: '0 */6 * * *'
+  repository_dispatch:
+    types: [profile-update]
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['scripts/**']
+
+concurrency:
+  group: profile-update
+  cancel-in-progress: true
+
+jobs:
+  update:
+    if: github.repository == 'richtan/richtan'
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - run: pip install -r requirements.txt
+
+      - name: Generate profile
+        run: python scripts/generate.py
+        env:
+          GITHUB_TOKEN: ${{ secrets.PROFILE_TOKEN }}
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add README.md
+          git diff --cached --quiet && echo "No changes" && exit 0
+          git commit -m "Update profile"
+          pushed=false
+          for i in 1 2 3; do
+            git rebase --abort 2>/dev/null || true
+            git pull --rebase origin main && git push origin main && pushed=true && break
+            echo "Push failed, retrying ($i/3)..."
+            sleep 5
+          done
+          if [ "$pushed" = false ]; then
+            echo "Failed to push after 3 attempts"
+            exit 1
+          fi
