@@ -124,6 +124,10 @@ wrangler secret put WEBHOOK_SECRET
 wrangler secret put INSTALLATION_ID  # optional
 ```
 
+## Git Workflow
+
+Always `git pull --rebase origin main` before pushing. Automated profile updates (6h Actions cron, 12h Worker cron, webhook-triggered) commit directly to `main`, so the remote is frequently ahead.
+
 ## Conventions / Gotchas
 
 - All rendering targets max 80 visual chars per line
