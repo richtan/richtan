@@ -1,7 +1,32 @@
+# Python
 __pycache__/
 *.pyc
+*.pyo
+venv/
+.venv/
+
+# Node
+node_modules/
+
+# Cloudflare
+.wrangler/
+.dev.vars
+
+# Secrets / env
 .env
+.env.*
+
+# Atomic write artifacts
 .README.md.tmp
 *.tmp
-node_modules/
-.wrangler/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
