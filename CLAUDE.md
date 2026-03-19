@@ -131,7 +131,6 @@ README.md is auto-generated. Pushing script changes to `main` triggers CI to reg
 1. Run `generate.py` locally to verify changes look correct
 2. **Only commit script changes** — do not commit README.md. Discard local README changes with `git checkout README.md`
 3. `git pull --rebase origin main && git push`
-4. Wait for CI to regenerate README.md, then `git pull` to sync the updated README locally
 
 CI will regenerate and commit README.md automatically. This avoids rebase conflicts with automated profile updates (6h Actions cron, 12h Worker cron, webhook-triggered) that also modify README.md on `main`.
 
