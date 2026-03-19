@@ -91,7 +91,7 @@ def main():
     now = datetime.now(timezone.utc)
     timestamp = now.strftime("%Y-%m-%d %H:%M UTC")
     output_lines.append("")
-    output_lines.append(f"  <b>Last updated: {timestamp}</b>")
+    output_lines.append(f"<b>Last updated: {timestamp}</b>")
 
     # Validate
     if not validate_output(output_lines):

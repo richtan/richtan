@@ -96,12 +96,12 @@ def render_activity(contributions_collection):
 
     # --- Render ---
     lines = []
-    lines.append("  <b>Contribution Activity</b>")
+    lines.append("<b>Contribution Activity</b>")
     lines.append("")
 
     for year, month in sorted_months:
         month_name = datetime(year, month, 1).strftime("%B")
-        header = f"  <b>{month_name}</b> {year} "
+        header = f"<b>{month_name}</b> {year} "
         header_visual = visual_len(header)
         lines.append(header + "─" * (LINE_WIDTH - header_visual))
         lines.append("")
@@ -113,7 +113,7 @@ def render_activity(contributions_collection):
             total_commits = sum(r["count"] for _, r in sorted_repos)
             repo_word = "repository" if len(sorted_repos) == 1 else "repositories"
             commit_word = "commit" if total_commits == 1 else "commits"
-            lines.append(f"    Created {total_commits} {commit_word} in {len(sorted_repos)} {repo_word}")
+            lines.append(f"  Created {total_commits} {commit_word} in {len(sorted_repos)} {repo_word}")
             lines.extend(_render_repo_lines(sorted_repos, show_count=True))
             lines.append("")
 
@@ -124,7 +124,7 @@ def render_activity(contributions_collection):
             total_prs = sum(r["count"] for _, r in sorted_repos)
             repo_word = "repository" if len(sorted_repos) == 1 else "repositories"
             pr_word = "pull request" if total_prs == 1 else "pull requests"
-            lines.append(f"    Opened {total_prs} {pr_word} in {len(sorted_repos)} {repo_word}")
+            lines.append(f"  Opened {total_prs} {pr_word} in {len(sorted_repos)} {repo_word}")
             lines.extend(_render_repo_lines(sorted_repos, show_count=True))
             lines.append("")
 
@@ -135,7 +135,7 @@ def render_activity(contributions_collection):
             total_reviews = sum(r["count"] for _, r in sorted_repos)
             repo_word = "repository" if len(sorted_repos) == 1 else "repositories"
             pr_word = "pull request" if total_reviews == 1 else "pull requests"
-            lines.append(f"    Reviewed {total_reviews} {pr_word} in {len(sorted_repos)} {repo_word}")
+            lines.append(f"  Reviewed {total_reviews} {pr_word} in {len(sorted_repos)} {repo_word}")
             lines.extend(_render_repo_lines(sorted_repos, show_count=True))
             lines.append("")
 
@@ -143,13 +143,13 @@ def render_activity(contributions_collection):
         month_repos = repos_by_month.get((year, month), [])
         if month_repos:
             repo_word = "repository" if len(month_repos) == 1 else "repositories"
-            lines.append(f"    Created {len(month_repos)} {repo_word}")
+            lines.append(f"  Created {len(month_repos)} {repo_word}")
             for i, repo in enumerate(month_repos):
                 is_last = (i == len(month_repos) - 1)
                 branch = "└─ " if is_last else "├─ "
                 escaped_name = html.escape(repo["nameWithOwner"])
                 link = f'<a href="{repo["url"]}">{escaped_name}</a>'
-                lines.append(f"    {branch}{link}")
+                lines.append(f"  {branch}{link}")
             lines.append("")
 
     return lines
@@ -180,7 +180,7 @@ def _render_repo_lines(sorted_repos, show_count=True):
 
         if show_count:
             count_str = f" {info['count']}"
-            prefix = f"    {branch}{link} "
+            prefix = f"  {branch}{link} "
             # Visual width of the prefix (indent + branch + link text + space)
             prefix_visual = visual_len(prefix)
             count_visual = len(count_str)
@@ -188,8 +188,8 @@ def _render_repo_lines(sorted_repos, show_count=True):
             if dots_needed < 2:
                 dots_needed = 2
             dots = "·" * dots_needed
-            lines.append(f"    {branch}{link} {dots}{count_str}")
+            lines.append(f"  {branch}{link} {dots}{count_str}")
         else:
-            lines.append(f"    {branch}{link}")
+            lines.append(f"  {branch}{link}")
 
     return lines
