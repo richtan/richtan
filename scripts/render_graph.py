@@ -1,5 +1,7 @@
 """Renders the GitHub contribution graph as text art."""
 
+from render_pinned import visual_len, visual_pad
+
 LEVEL_CHARS = {
     "NONE": "·",
     "FIRST_QUARTILE": "░",
@@ -35,7 +37,7 @@ def render_graph(contributions_collection):
     # Blank line before header.
     lines.append("")
 
-    # Header.
+    # Header (outside border).
     lines.append(f"  {total} contributions in the last year")
     lines.append("")
 
@@ -63,7 +65,9 @@ def render_graph(contributions_collection):
                 month_row[pos] = ch
         prev_col = col
 
-    lines.append("".join(month_row).rstrip())
+    # Build inside-border content lines.
+    inside_lines = []
+    inside_lines.append("".join(month_row).rstrip())
 
     # Build the grid: 7 rows (Sun=0 .. Sat=6), one column per week.
     grid = [[""] * len(weeks) for _ in range(7)]
@@ -84,14 +88,21 @@ def render_graph(contributions_collection):
     for weekday in range(7):
         prefix = DAY_LABELS.get(weekday, "     ")
         row_str = prefix + "".join(grid[weekday])
-        lines.append(row_str.rstrip())
+        inside_lines.append(row_str.rstrip())
 
-    lines.append("")
+    inside_lines.append("")
 
     # Legend.
-    lines.append("       Less · ░ ▒ ▓ █ More")
+    inside_lines.append("       Less · ░ ▒ ▓ █ More")
 
-    # Blank line after legend.
+    # Wrap inside lines with box-drawing border.
+    max_w = max(visual_len(line) for line in inside_lines)
+    lines.append("┌─" + "─" * max_w + "─┐")
+    for line in inside_lines:
+        lines.append("│ " + visual_pad(line, max_w) + " │")
+    lines.append("└─" + "─" * max_w + "─┘")
+
+    # Blank line after border.
     lines.append("")
 
     return lines
