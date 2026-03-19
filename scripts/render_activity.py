@@ -13,12 +13,16 @@ def render_activity(contributions_collection):
     # commits_by_month: {(year, month): {nameWithOwner: {"url":..., "count":...}}}
     commits_by_month = defaultdict(lambda: defaultdict(lambda: {"url": "", "count": 0}))
     for entry in contributions_collection.get("commitContributionsByRepository", []):
-        repo = entry.get("repository", {})
+        if entry is None:
+            continue
+        repo = entry.get("repository") or {}
         if repo.get("isPrivate", False):
             continue
         name = repo.get("nameWithOwner", "")
         url = repo.get("url", "")
         for node in entry.get("contributions", {}).get("nodes", []):
+            if node is None:
+                continue
             dt = _parse_date(node.get("occurredAt", ""))
             if dt is None:
                 continue
@@ -29,10 +33,14 @@ def render_activity(contributions_collection):
     # prs_by_month: {(year, month): {nameWithOwner: {"url":..., "count":...}}}
     prs_by_month = defaultdict(lambda: defaultdict(lambda: {"url": "", "count": 0}))
     for entry in contributions_collection.get("pullRequestContributionsByRepository", []):
-        repo = entry.get("repository", {})
+        if entry is None:
+            continue
+        repo = entry.get("repository") or {}
         name = repo.get("nameWithOwner", "")
         url = repo.get("url", "")
         for node in entry.get("contributions", {}).get("nodes", []):
+            if node is None:
+                continue
             dt = _parse_date(node.get("occurredAt", ""))
             if dt is None:
                 continue
@@ -43,10 +51,14 @@ def render_activity(contributions_collection):
     # reviews_by_month: {(year, month): {nameWithOwner: {"url":..., "count":...}}}
     reviews_by_month = defaultdict(lambda: defaultdict(lambda: {"url": "", "count": 0}))
     for entry in contributions_collection.get("pullRequestReviewContributionsByRepository", []):
-        repo = entry.get("repository", {})
+        if entry is None:
+            continue
+        repo = entry.get("repository") or {}
         name = repo.get("nameWithOwner", "")
         url = repo.get("url", "")
         for node in entry.get("contributions", {}).get("nodes", []):
+            if node is None:
+                continue
             dt = _parse_date(node.get("occurredAt", ""))
             if dt is None:
                 continue
@@ -57,7 +69,9 @@ def render_activity(contributions_collection):
     # repos_by_month: {(year, month): [{"name":..., "nameWithOwner":..., "url":...}]}
     repos_by_month = defaultdict(list)
     for node in contributions_collection.get("repositoryContributions", {}).get("nodes", []):
-        repo = node.get("repository", {})
+        if node is None:
+            continue
+        repo = node.get("repository") or {}
         if repo.get("isPrivate", False):
             continue
         dt = _parse_date(node.get("occurredAt", ""))
