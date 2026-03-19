@@ -6,6 +6,8 @@ from datetime import datetime
 
 from render_pinned import visual_len, visual_pad
 
+LINE_WIDTH = 72
+
 
 def render_activity(contributions_collection):
     """Render the contribution activity timeline. Returns list of text lines."""
@@ -90,16 +92,18 @@ def render_activity(contributions_collection):
     all_months.update(prs_by_month.keys())
     all_months.update(reviews_by_month.keys())
     all_months.update(repos_by_month.keys())
-    sorted_months = sorted(all_months, reverse=True)
+    sorted_months = sorted(all_months, reverse=True)[:3]
 
     # --- Render ---
     lines = []
-    lines.append("  Contribution Activity")
+    lines.append("  <b>Contribution Activity</b>")
     lines.append("")
 
     for year, month in sorted_months:
         month_name = datetime(year, month, 1).strftime("%B")
-        lines.append(f"  {month_name} {year}")
+        header = f"  <b>{month_name}</b> {year} "
+        header_visual = visual_len(header)
+        lines.append(header + "─" * (LINE_WIDTH - header_visual))
         lines.append("")
 
         # Commits
@@ -167,7 +171,6 @@ def _render_repo_lines(sorted_repos, show_count=True):
     sorted_repos: list of (nameWithOwner, {"url": ..., "count": ...})
     Returns list of strings.
     """
-    LINE_WIDTH = 72
     lines = []
     for i, (name, info) in enumerate(sorted_repos):
         is_last = (i == len(sorted_repos) - 1)

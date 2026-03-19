@@ -38,7 +38,7 @@ def render_graph(contributions_collection):
     lines.append("")
 
     # Header (outside border).
-    lines.append(f"  {total} contributions in the last year")
+    lines.append(f"  <b>{total} contributions in the last year</b>")
     lines.append("")
 
     # Build a mapping from date string to week index so we can place month
