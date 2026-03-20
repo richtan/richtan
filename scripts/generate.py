@@ -48,6 +48,14 @@ def main():
 
     username = os.environ.get("GITHUB_USERNAME", "").strip() or fetch_username(token)
 
+    # Timezone
+    tz_name = os.environ.get("PROFILE_TIMEZONE", "America/New_York").strip()
+    try:
+        tz = ZoneInfo(tz_name)
+    except (KeyError, Exception):
+        print(f"WARNING: Invalid timezone '{tz_name}', falling back to America/New_York")
+        tz = ZoneInfo("America/New_York")
+
     # Fetch data
     data = fetch_profile_data(token, username)
     user = data["user"]
@@ -79,7 +87,7 @@ def main():
     graph_lines = render_graph(contributions)
 
     print("Rendering activity timeline...")
-    activity_lines = render_activity(contributions)
+    activity_lines = render_activity(contributions, tz=tz)
 
     # Combine
     output_lines = []
@@ -90,8 +98,9 @@ def main():
     output_lines.extend(activity_lines)
 
     # Add timestamp
-    now = datetime.now(ZoneInfo("America/New_York"))
-    timestamp = now.strftime("%Y-%m-%d %H:%M ET")
+    now = datetime.now(tz)
+    tz_abbr = now.strftime("%Z") or tz_name
+    timestamp = now.strftime("%Y-%m-%d %H:%M") + f" {tz_abbr}"
     output_lines.append("")
     output_lines.append(f"<b>Last updated: {timestamp}</b>")
     safe_user = html.escape(username)

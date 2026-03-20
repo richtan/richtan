@@ -8,8 +8,13 @@ from utils import safe_href, visual_len, visual_pad
 LINE_WIDTH = 72
 
 
-def render_activity(contributions_collection):
+_DEFAULT_TZ = ZoneInfo("America/New_York")
+
+
+def render_activity(contributions_collection, tz=None):
     """Render the contribution activity timeline. Returns list of text lines."""
+    if tz is None:
+        tz = _DEFAULT_TZ
     # --- Gather per-month data ---
     # commits_by_month: {(year, month): {nameWithOwner: {"url":..., "count":...}}}
     commits_by_month = defaultdict(lambda: defaultdict(lambda: {"url": "", "count": 0}))
@@ -24,7 +29,7 @@ def render_activity(contributions_collection):
         for node in entry.get("contributions", {}).get("nodes", []):
             if node is None:
                 continue
-            dt = _parse_date(node.get("occurredAt", ""))
+            dt = _parse_date(node.get("occurredAt", ""), tz)
             if dt is None:
                 continue
             key = (dt.year, dt.month)
@@ -44,7 +49,7 @@ def render_activity(contributions_collection):
         for node in entry.get("contributions", {}).get("nodes", []):
             if node is None:
                 continue
-            dt = _parse_date(node.get("occurredAt", ""))
+            dt = _parse_date(node.get("occurredAt", ""), tz)
             if dt is None:
                 continue
             key = (dt.year, dt.month)
@@ -64,7 +69,7 @@ def render_activity(contributions_collection):
         for node in entry.get("contributions", {}).get("nodes", []):
             if node is None:
                 continue
-            dt = _parse_date(node.get("occurredAt", ""))
+            dt = _parse_date(node.get("occurredAt", ""), tz)
             if dt is None:
                 continue
             key = (dt.year, dt.month)
@@ -79,7 +84,7 @@ def render_activity(contributions_collection):
         repo = node.get("repository") or {}
         if repo.get("isPrivate", False):
             continue
-        dt = _parse_date(node.get("occurredAt", ""))
+        dt = _parse_date(node.get("occurredAt", ""), tz)
         if dt is None:
             continue
         key = (dt.year, dt.month)
@@ -153,7 +158,7 @@ def render_activity(contributions_collection):
                 branch = "└─ " if is_last else "├─ "
                 escaped_name = html.escape(repo["nameWithOwner"])
                 link = f'<a href="{safe_href(repo["url"])}">{escaped_name}</a>'
-                date_str = repo["date"].strftime("%b %-d")
+                date_str = repo["date"].strftime("%b %d").replace(" 0", " ")
                 prefix = f"  {branch}{link} "
                 prefix_visual = visual_len(prefix)
                 date_visual = visual_len(date_str)
@@ -167,16 +172,13 @@ def render_activity(contributions_collection):
     return lines
 
 
-_ET = ZoneInfo("America/New_York")
-
-
-def _parse_date(date_str):
-    """Parse an ISO 8601 date string into a datetime in ET, or None."""
+def _parse_date(date_str, tz):
+    """Parse an ISO 8601 date string into a datetime in the given tz, or None."""
     if not date_str:
         return None
     try:
         dt = datetime.fromisoformat(date_str.replace("Z", "+00:00"))
-        return dt.astimezone(_ET)
+        return dt.astimezone(tz)
     except (ValueError, AttributeError):
         return None
 
