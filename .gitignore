@@ -30,3 +30,7 @@ Thumbs.db
 *~
 .idea/
 .vscode/
+
+# Test / dev
+.pytest_cache/
+.claude/
