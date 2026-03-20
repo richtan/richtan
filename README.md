@@ -1,3 +1,5 @@
+Auto-generated GitHub profile README with text-art pinned repo cards, contribution heatmap, and activity timeline. See [SETUP.md](SETUP.md) to set up your own.
+
 <!-- PROFILE START -->
 <!-- hash:ae3234f8c01077c0 -->
 <pre>┌─────────────────────────────────────┐  ┌─────────────────────────────────────┐

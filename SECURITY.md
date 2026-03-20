@@ -15,6 +15,3 @@ This project renders a GitHub profile README from API data. Security-relevant ar
 - **Webhook signature bypass** in the Cloudflare Worker
 - **Secret exposure** in logs, error messages, or committed files
 
-## Response
-
-I'll acknowledge reports within 48 hours and aim to release fixes within 7 days for confirmed vulnerabilities.

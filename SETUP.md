@@ -56,9 +56,30 @@ The `worker/` directory contains a Cloudflare Worker that triggers profile updat
 
 </details>
 
+## Configuration
+
+| Environment Variable | Default | Description |
+|---------------------|---------|-------------|
+| `GITHUB_TOKEN` | (required) | PAT with `read:user` scope |
+| `GITHUB_USERNAME` | auto-detected | Override the username to render |
+| `PROFILE_TIMEZONE` | `America/New_York` | Timezone for timestamps and date grouping (any IANA timezone, e.g., `Europe/London`, `Asia/Tokyo`) |
+
+To set `PROFILE_TIMEZONE` in GitHub Actions, add it to the workflow env block or as a repository variable.
+
 ## Notes
 
+- **Python version**: 3.9 or later required (3.12 recommended). The workflow uses 3.12.
 - **Scheduled workflows on forks**: GitHub automatically disables scheduled workflows on forked repos after 60 days of inactivity. If your profile stops updating, go to Actions → "Update Profile" and re-enable it, or push any commit.
 - **Dependabot**: This repo includes `.github/dependabot.yml` which creates automated dependency update PRs. Delete it if you don't want these.
 - **Local development**: Run `GITHUB_TOKEN=<your-pat> python scripts/generate.py` from the repo root to preview changes locally.
+- **Running tests**: `pip install -r requirements-dev.txt && pytest`
 - **Syncing with upstream**: When your fork falls behind, click **Sync fork** on your repo's main page. If there are conflicts (from automated README updates), click **Discard N commits** — this is safe because the Action will regenerate README.md on its next run. Your `PROFILE_TOKEN` secret is preserved since secrets live in GitHub settings, not in the repo.
+
+## Troubleshooting
+
+- **"GITHUB_TOKEN not set"** — Make sure `PROFILE_TOKEN` is set in Settings → Secrets and variables → Actions.
+- **"Could not fetch user"** — Your token may be expired or missing the `read:user` scope. Generate a new one.
+- **"Rate limited"** — GitHub's GraphQL API rate-limits at 5,000 points/hour. Wait and retry, or use a less-scoped token.
+- **Workflow shows as disabled** — GitHub disables scheduled workflows after 60 days of fork inactivity. Re-enable it in the Actions tab.
+- **Webhook secret** — Use a random string of 32+ characters (e.g., `openssl rand -hex 32`).
+- **INSTALLATION_ID** — This is auto-detected from the GitHub App's first installation. Only set it manually if you have multiple installations.
