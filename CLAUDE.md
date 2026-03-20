@@ -152,3 +152,49 @@ CI will regenerate and commit README.md automatically. This avoids rebase confli
 - Atomic writes prevent README corruption (temp file + `os.rename`)
 - GraphQL username is string-interpolated, not parameterized — this is intentional (it's the authenticated user's own username)
 - The Worker uses two different GitHub dispatch APIs: `workflow_dispatch` for scheduled runs, `repository_dispatch` for webhook-triggered runs
+
+## Webhook Coverage Gaps
+
+The worker's `ALLOWED_EVENTS` allowlist only covers 3 event types. Many profile-affecting changes are only picked up by the 6h/12h cron.
+
+### Covered triggers
+
+- **Webhook**: `repository:created`, `pull_request:opened/closed/reopened`, `pull_request_review:*` (all actions)
+- **Cron**: Actions schedule (every 6h), Worker scheduled handler (every 12h)
+- **Code push**: `scripts/**` on main (triggers Actions workflow)
+
+### Gaps by rendered section
+
+**Pinned repo cards** — all silent (no webhook triggers):
+- Pin/unpin repos — **no webhook event exists at all**
+- Edit repo description — `repository:edited` exists, not in allowlist
+- Rename repo — `repository:renamed` exists, not in allowlist
+- Primary language change (via code push) — `push` exists, not in allowlist
+- Star count changes — `star:created/deleted` exists, not in allowlist
+- Fork count changes — `fork` exists, not in allowlist
+- Repo visibility change — `repository:privatized/publicized` exist, not in allowlist
+- Archive/unarchive — `repository:archived/unarchived` exist, not in allowlist
+- Delete repo — `repository:deleted` exists, not in allowlist
+
+**Contribution graph** — mostly silent:
+- Push commits — `push` exists, not in allowlist. **Primary contribution type, completely uncovered.**
+- Create issues — `issues` exists, not in allowlist
+
+**Activity timeline** — commits are silent:
+- Commits (largest timeline category) — same `push` gap
+- PRs and reviews are covered; repo creation is covered
+
+**Popular repos fallback** — same gaps as pinned cards, plus star ranking shifts are silent
+
+### No webhook exists (cannot fix by expanding allowlist)
+
+- Pin/unpin repos on profile
+- Profile bio/avatar/status changes (not rendered, but worth noting)
+
+### High-value events to consider adding
+
+1. `push` — closes the commit gap (biggest single improvement)
+2. `repository` actions: `edited`, `renamed`, `privatized`, `publicized`, `archived`, `deleted` — closes all repo metadata gaps
+3. `star` — star count changes (high frequency, may need rate limiting care)
+4. `fork` — fork count changes
+5. `issues:opened/closed` — issue contributions
