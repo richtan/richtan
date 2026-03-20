@@ -1,6 +1,6 @@
 """Renders the GitHub contribution graph as text art."""
 
-from render_pinned import visual_len, visual_pad
+from utils import visual_len, visual_pad
 
 LEVEL_CHARS = {
     "NONE": "·",

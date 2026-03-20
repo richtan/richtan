@@ -15,7 +15,8 @@ from zoneinfo import ZoneInfo
 from github_api import fetch_profile_data, fetch_username
 from render_activity import render_activity
 from render_graph import render_graph
-from render_pinned import render_pinned, visual_len
+from render_pinned import render_pinned
+from utils import visual_len
 
 MARKER_START = "<!-- PROFILE START -->"
 MARKER_END = "<!-- PROFILE END -->"

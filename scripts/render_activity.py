@@ -1,20 +1,11 @@
 import html
-import re
-import unicodedata
 from collections import defaultdict
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
-from render_pinned import visual_len, visual_pad
+from utils import safe_href, visual_len, visual_pad
 
 LINE_WIDTH = 72
-
-
-def safe_href(url):
-    """Return an HTML-safe href value, or '#' if the URL scheme is invalid."""
-    if url and url.startswith(("https://", "http://")):
-        return html.escape(url)
-    return "#"
 
 
 def render_activity(contributions_collection):
