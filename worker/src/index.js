@@ -16,6 +16,12 @@ const ALLOWED_EVENTS = {
   issues: new Set(["opened", "closed"]),
 };
 
+const REPO_RE = /^[a-zA-Z0-9._-]+\/[a-zA-Z0-9._-]+$/;
+
+function isValidRepo(repo) {
+  return typeof repo === "string" && REPO_RE.test(repo);
+}
+
 // GitHub App keys are PKCS#1 (BEGIN RSA PRIVATE KEY), but jose needs PKCS#8.
 // Convert by wrapping the PKCS#1 DER in a PKCS#8 ASN.1 envelope.
 function ensurePKCS8(pem) {
@@ -25,7 +31,6 @@ function ensurePKCS8(pem) {
   const b64 = pem
     .replace(/-----BEGIN RSA PRIVATE KEY-----/, "")
     .replace(/-----END RSA PRIVATE KEY-----/, "")
-    .replace(/\\n/g, "")
     .replace(/\s/g, "");
   const pkcs1 = Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
 
@@ -90,7 +95,13 @@ async function getInstallationToken(env) {
         "User-Agent": USER_AGENT,
       },
     });
+    if (!res.ok) {
+      throw new Error(`Failed to fetch installations: HTTP ${res.status}`);
+    }
     const installations = await res.json();
+    if (!Array.isArray(installations) || installations.length === 0) {
+      throw new Error("No app installations found");
+    }
     installationId = installations[0].id;
   }
 
@@ -105,7 +116,13 @@ async function getInstallationToken(env) {
       },
     },
   );
+  if (!res.ok) {
+    throw new Error(`Failed to create installation token: HTTP ${res.status}`);
+  }
   const data = await res.json();
+  if (!data.token) {
+    throw new Error("Installation token response missing 'token' field");
+  }
   return data.token;
 }
 
@@ -114,6 +131,9 @@ async function getInstallationToken(env) {
 // ---------------------------------------------------------------------------
 
 function hexToBytes(hex) {
+  if (!/^[0-9a-f]+$/i.test(hex) || hex.length % 2 !== 0) {
+    return null;
+  }
   const bytes = new Uint8Array(hex.length / 2);
   for (let i = 0; i < hex.length; i += 2) {
     bytes[i / 2] = parseInt(hex.substring(i, i + 2), 16);
@@ -126,6 +146,10 @@ async function verifySignature(secret, body, signatureHeader) {
     return false;
   }
   const receivedHex = signatureHeader.slice("sha256=".length);
+  const received = hexToBytes(receivedHex);
+  if (!received) {
+    return false;
+  }
   const encoder = new TextEncoder();
   const key = await crypto.subtle.importKey(
     "raw",
@@ -136,7 +160,6 @@ async function verifySignature(secret, body, signatureHeader) {
   );
   const signed = await crypto.subtle.sign("HMAC", key, encoder.encode(body));
   const expected = new Uint8Array(signed);
-  const received = hexToBytes(receivedHex);
 
   if (expected.byteLength !== received.byteLength) {
     return false;
@@ -154,6 +177,11 @@ export default {
       return new Response("Method Not Allowed", { status: 405 });
     }
 
+    const contentType = request.headers.get("Content-Type") || "";
+    if (!contentType.includes("application/json")) {
+      return new Response("Unsupported Media Type", { status: 415 });
+    }
+
     try {
       const rawBody = await request.text();
 
@@ -166,7 +194,13 @@ export default {
         return new Response("Unauthorized", { status: 401 });
       }
 
-      const payload = JSON.parse(rawBody);
+      let payload;
+      try {
+        payload = JSON.parse(rawBody);
+      } catch {
+        return new Response("Bad Request", { status: 400 });
+      }
+
       const event = request.headers.get("X-GitHub-Event");
 
       const allowedActions = ALLOWED_EVENTS[event];
@@ -203,13 +237,13 @@ export default {
 
   async scheduled(event, env, ctx) {
     const repo = env.DISPATCH_REPO;
-    if (!repo || !repo.includes("/")) {
+    if (!isValidRepo(repo)) {
       console.error("DISPATCH_REPO not set or invalid (expected 'owner/repo')");
       return;
     }
     try {
       const token = await getInstallationToken(env);
-      await fetch(
+      const res = await fetch(
         `https://api.github.com/repos/${repo}/actions/workflows/update-profile.yml/dispatches`,
         {
           method: "POST",
@@ -221,6 +255,9 @@ export default {
           body: JSON.stringify({ ref: "main" }),
         },
       );
+      if (!res.ok) {
+        console.error(`Scheduled dispatch failed: HTTP ${res.status}`);
+      }
     } catch (err) {
       console.error("Scheduled dispatch error:", err.message);
     }
@@ -300,7 +337,12 @@ export class ProfileDebounce {
       this.sql.exec(
         "INSERT OR REPLACE INTO state (key, value) VALUES ('alarm_pending', 'true')",
       );
-      await this.ctx.storage.setAlarm(Date.now() + 60_000);
+      try {
+        await this.ctx.storage.setAlarm(Date.now() + 60_000);
+      } catch (err) {
+        this.sql.exec("DELETE FROM state WHERE key = 'alarm_pending'");
+        console.error("Failed to set alarm:", err.message);
+      }
     }
 
     return Response.json({ dispatched: true });
@@ -308,7 +350,7 @@ export class ProfileDebounce {
 
   async alarm() {
     const repo = this.env.DISPATCH_REPO;
-    if (!repo || !repo.includes("/")) {
+    if (!isValidRepo(repo)) {
       console.error("DISPATCH_REPO not set or invalid (expected 'owner/repo')");
       this.sql.exec("DELETE FROM state WHERE key = 'alarm_pending'");
       return;
@@ -328,8 +370,7 @@ export class ProfileDebounce {
         },
       );
       if (!res.ok) {
-        const body = await res.text();
-        console.error(`Dispatch failed: HTTP ${res.status} — ${body}`);
+        console.error(`Dispatch failed: HTTP ${res.status}`);
       }
 
       // Record dispatch
@@ -341,10 +382,14 @@ export class ProfileDebounce {
       console.error("Alarm dispatch error:", err.message);
     }
 
-    // Clean up records older than 24 hours
-    const oneDayAgo = Date.now() - 24 * 60 * 60 * 1000;
-    this.sql.exec("DELETE FROM deliveries WHERE created_at < ?", oneDayAgo);
-    this.sql.exec("DELETE FROM dispatches WHERE timestamp < ?", oneDayAgo);
+    // Clean up records older than 24 hours and clear pending flag
+    try {
+      const oneDayAgo = Date.now() - 24 * 60 * 60 * 1000;
+      this.sql.exec("DELETE FROM deliveries WHERE created_at < ?", oneDayAgo);
+      this.sql.exec("DELETE FROM dispatches WHERE timestamp < ?", oneDayAgo);
+    } catch (err) {
+      console.error("Cleanup error:", err.message);
+    }
 
     // Clear pending flag
     this.sql.exec("DELETE FROM state WHERE key = 'alarm_pending'");
