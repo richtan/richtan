@@ -81,21 +81,21 @@ query($login: String!, $from: DateTime!, $to: DateTime!) {
           }
         }
       }
-      commitContributionsByRepository(maxRepositories: 10) {
+      commitContributionsByRepository(maxRepositories: 100) {
         repository { name nameWithOwner url isPrivate }
         contributions(first: 100) {
           totalCount
           nodes { occurredAt commitCount }
         }
       }
-      pullRequestContributionsByRepository(maxRepositories: 5) {
+      pullRequestContributionsByRepository(maxRepositories: 50) {
         repository { name nameWithOwner url isPrivate }
         contributions(first: 100) {
           totalCount
           nodes { occurredAt }
         }
       }
-      pullRequestReviewContributionsByRepository(maxRepositories: 5) {
+      pullRequestReviewContributionsByRepository(maxRepositories: 50) {
         repository { name nameWithOwner url isPrivate }
         contributions(first: 100) {
           totalCount

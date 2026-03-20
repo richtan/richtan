@@ -63,7 +63,7 @@ AGENTS.md              AI assistant setup runbook (auto-discovered by coding too
 - Content lives between `<!-- PROFILE START -->` / `<!-- PROFILE END -->` markers
 
 ### `github_api.py`
-- Fetches 366-day window via GraphQL: pinned repos (6), commits by repo (top 10, 100 nodes each), PRs by repo (top 5), reviews by repo (top 5), repos created (10), contribution calendar
+- Fetches 366-day window via GraphQL: pinned repos (6), commits by repo (top 100, 100 nodes each), PRs by repo (top 50), reviews by repo (top 50), repos created (10), contribution calendar
 - Username is passed as a proper GraphQL variable (`$login`), validated against GitHub's username regex
 - Bearer token auth, 30s timeout
 
