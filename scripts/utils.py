@@ -57,6 +57,9 @@ def word_wrap(text, max_width):
         if not word:
             continue
         if current_line == '':
+            # Truncate single words that exceed max_width
+            if visual_len(word) > max_width:
+                word = visual_truncate(word, max_width)
             current_line = word
         else:
             test = current_line + ' ' + word
@@ -64,6 +67,8 @@ def word_wrap(text, max_width):
                 current_line = test
             else:
                 lines.append(current_line)
+                if visual_len(word) > max_width:
+                    word = visual_truncate(word, max_width)
                 current_line = word
     if current_line:
         lines.append(current_line)

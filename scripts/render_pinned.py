@@ -72,7 +72,12 @@ def _render_card_lines(repo, username, inner_width=35):
 
     if lang_name and right_text:
         gap = inner_width - visual_len(lang_name) - visual_len(right_text)
-        stats = lang_name + ' ' * max(1, gap) + right_text
+        if gap < 1:
+            # Truncate language name to fit
+            max_lang = inner_width - visual_len(right_text) - 1
+            lang_name = visual_truncate(lang_name, max_lang)
+            gap = 1
+        stats = lang_name + ' ' * gap + right_text
     elif lang_name:
         stats = lang_name
     elif right_text:

@@ -156,7 +156,7 @@ def render_activity(contributions_collection):
                 date_str = repo["date"].strftime("%b %-d")
                 prefix = f"  {branch}{link} "
                 prefix_visual = visual_len(prefix)
-                date_visual = len(date_str)
+                date_visual = visual_len(date_str)
                 dots_needed = LINE_WIDTH - prefix_visual - 1 - date_visual
                 if dots_needed < 2:
                     dots_needed = 2
@@ -199,7 +199,7 @@ def _render_repo_lines(sorted_repos, show_count=True):
             prefix = f"  {branch}{link} "
             # Visual width of the prefix (indent + branch + link text + space)
             prefix_visual = visual_len(prefix)
-            count_visual = len(count_str)
+            count_visual = visual_len(count_str)
             dots_needed = LINE_WIDTH - prefix_visual - count_visual
             if dots_needed < 2:
                 dots_needed = 2
