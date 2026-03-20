@@ -38,10 +38,25 @@ query($from: DateTime!, $to: DateTime!) {{
           description
           isPrivate
           isFork
+          parent {{ nameWithOwner }}
           primaryLanguage {{ name }}
           stargazerCount
           forkCount
         }}
+      }}
+    }}
+    repositories(first: 6, ownerAffiliations: [OWNER], orderBy: {{field: STARGAZERS, direction: DESC}}, privacy: PUBLIC) {{
+      nodes {{
+        name
+        nameWithOwner
+        url
+        description
+        isPrivate
+        isFork
+        parent {{ nameWithOwner }}
+        primaryLanguage {{ name }}
+        stargazerCount
+        forkCount
       }}
     }}
     contributionsCollection(from: $from, to: $to) {{
@@ -138,6 +153,14 @@ def fetch_profile_data(token, username):
 
     # Apply nullable defaults to pinned repos
     for repo in user["pinnedItems"]["nodes"]:
+        if not repo.get("description"):
+            repo["description"] = "No description"
+        repo["primaryLanguage"] = (
+            repo["primaryLanguage"]["name"] if repo.get("primaryLanguage") else None
+        )
+
+    # Apply nullable defaults to popular repos (fallback for empty pinned)
+    for repo in user.get("repositories", {}).get("nodes", []):
         if not repo.get("description"):
             repo["description"] = "No description"
         repo["primaryLanguage"] = (

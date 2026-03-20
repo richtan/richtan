@@ -55,11 +55,17 @@ def main():
         if not r.get("isPrivate", False)
     ]
 
+    # Fall back to popular repos when nothing is pinned
+    if not pinned_repos:
+        pinned_repos = user.get("repositories", {}).get("nodes", [])
+
     # Sanitize dynamic text
     for repo in pinned_repos:
         repo["description"] = sanitize(repo.get("description") or "No description")
         repo["name"] = sanitize(repo.get("name", ""))
         repo["nameWithOwner"] = sanitize(repo.get("nameWithOwner", ""))
+        if repo.get("parent") and repo["parent"].get("nameWithOwner"):
+            repo["parent"]["nameWithOwner"] = sanitize(repo["parent"]["nameWithOwner"])
 
     # Render sections
     print("Rendering pinned repos...")

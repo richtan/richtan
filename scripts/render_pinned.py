@@ -89,6 +89,17 @@ def _render_card_lines(repo, username, inner_width=35):
     name_link = f'<a href="{url}"><b>{html.escape(truncated_name)}</b></a>'
     lines.append(content_line(name_link))
 
+    # Fork line (only if fork with known parent)
+    if repo.get('isFork') and repo.get('parent'):
+        parent_nwo = repo['parent'].get('nameWithOwner', '')
+        if parent_nwo:
+            fork_text = f'Forked from {parent_nwo}'
+            if visual_len(fork_text) > inner_width:
+                max_nwo = inner_width - visual_len('Forked from ')
+                parent_nwo = visual_truncate(parent_nwo, max_nwo)
+                fork_text = f'Forked from {parent_nwo}'
+            lines.append(content_line(f'<ins>{fork_text}</ins>'))
+
     # Description lines (2 max)
     description = repo.get('description') or 'No description'
     escaped_desc = html.escape(description)
@@ -152,9 +163,17 @@ def render_pinned(pinned_repos, username):
         else:
             pairs.append((pinned_repos[i], None))
 
+    blank_line = '│ ' + ' ' * 35 + ' │'
+
     for left_repo, right_repo in pairs:
         left_lines = _render_card_lines(left_repo, username)
         right_lines = _render_card_lines(right_repo, username) if right_repo else None
+
+        if right_lines:
+            max_height = max(len(left_lines), len(right_lines))
+            for card_lines in (left_lines, right_lines):
+                while len(card_lines) < max_height:
+                    card_lines.insert(-1, blank_line)
 
         for j in range(len(left_lines)):
             if right_lines:
