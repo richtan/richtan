@@ -46,10 +46,10 @@ The `worker/` directory contains a Cloudflare Worker that triggers profile updat
    Then deploy:
    ```sh
    npx wrangler deploy
-   wrangler secret put APP_ID           # Your GitHub App's ID
-   wrangler secret put APP_PRIVATE_KEY   # PKCS8 PEM private key from the app
-   wrangler secret put WEBHOOK_SECRET    # The webhook secret you chose
-   wrangler secret put INSTALLATION_ID   # Optional: find in app installation URL
+   wrangler secret put APP_ID              # Your GitHub App's ID
+   wrangler secret put APP_PRIVATE_KEY < path/to/private-key.pem  # Pipe from file to preserve newlines
+   wrangler secret put WEBHOOK_SECRET     # The webhook secret you chose
+   wrangler secret put INSTALLATION_ID    # Optional: find in app installation URL
    ```
 
 3. **Update the GitHub App** webhook URL to your deployed worker URL.

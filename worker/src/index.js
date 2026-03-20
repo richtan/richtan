@@ -16,8 +16,59 @@ const ALLOWED_EVENTS = {
   issues: new Set(["opened", "closed"]),
 };
 
+// GitHub App keys are PKCS#1 (BEGIN RSA PRIVATE KEY), but jose needs PKCS#8.
+// Convert by wrapping the PKCS#1 DER in a PKCS#8 ASN.1 envelope.
+function ensurePKCS8(pem) {
+  pem = pem.replace(/\\n/g, "\n");
+  if (!pem.includes("BEGIN RSA PRIVATE KEY")) return pem;
+
+  const b64 = pem
+    .replace(/-----BEGIN RSA PRIVATE KEY-----/, "")
+    .replace(/-----END RSA PRIVATE KEY-----/, "")
+    .replace(/\\n/g, "")
+    .replace(/\s/g, "");
+  const pkcs1 = Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
+
+  // PKCS#8 = SEQUENCE { version INTEGER 0, AlgorithmIdentifier, OCTET STRING { pkcs1 } }
+  const algorithmId = new Uint8Array([
+    0x30, 0x0d, 0x06, 0x09, 0x2a, 0x86, 0x48, 0x86, 0xf7, 0x0d, 0x01, 0x01,
+    0x01, 0x05, 0x00,
+  ]);
+  const version = new Uint8Array([0x02, 0x01, 0x00]);
+  const octet = asn1Wrap(0x04, pkcs1);
+  const pkcs8 = asn1Wrap(0x30, concat(version, algorithmId, octet));
+
+  const lines = btoa(String.fromCharCode(...pkcs8)).match(/.{1,64}/g);
+  return `-----BEGIN PRIVATE KEY-----\n${lines.join("\n")}\n-----END PRIVATE KEY-----`;
+}
+
+function asn1Wrap(tag, content) {
+  const len =
+    content.length < 0x80
+      ? [content.length]
+      : content.length < 0x100
+        ? [0x81, content.length]
+        : [0x82, (content.length >> 8) & 0xff, content.length & 0xff];
+  const out = new Uint8Array(1 + len.length + content.length);
+  out[0] = tag;
+  out.set(len, 1);
+  out.set(content, 1 + len.length);
+  return out;
+}
+
+function concat(...arrays) {
+  const total = arrays.reduce((s, a) => s + a.length, 0);
+  const out = new Uint8Array(total);
+  let offset = 0;
+  for (const a of arrays) {
+    out.set(a, offset);
+    offset += a.length;
+  }
+  return out;
+}
+
 async function generateJWT(env) {
-  const privateKey = await importPKCS8(env.APP_PRIVATE_KEY, "RS256");
+  const privateKey = await importPKCS8(ensurePKCS8(env.APP_PRIVATE_KEY), "RS256");
   const now = Math.floor(Date.now() / 1000);
   return new SignJWT({})
     .setProtectedHeader({ alg: "RS256" })
@@ -264,7 +315,7 @@ export class ProfileDebounce {
     }
     try {
       const token = await getInstallationToken(this.env);
-      await fetch(
+      const res = await fetch(
         `https://api.github.com/repos/${repo}/dispatches`,
         {
           method: "POST",
@@ -276,6 +327,10 @@ export class ProfileDebounce {
           body: JSON.stringify({ event_type: "profile-update" }),
         },
       );
+      if (!res.ok) {
+        const body = await res.text();
+        console.error(`Dispatch failed: HTTP ${res.status} — ${body}`);
+      }
 
       // Record dispatch
       this.sql.exec(
