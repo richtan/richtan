@@ -75,8 +75,95 @@ class TestRenderActivity:
         }
         lines = render_activity(data, tz=_ET)
         joined = "\n".join(lines)
-        # Should not contain any repo data, just the header
+        # Repo name should not appear, but private summary should
         assert "secret" not in joined
+        assert "contribution" in joined
+        assert "private" in joined
+
+    def test_private_summary_date_range(self):
+        data = {
+            "commitContributionsByRepository": [
+                {
+                    "repository": {"nameWithOwner": "user/public",
+                                   "url": "https://github.com/user/public", "isPrivate": False},
+                    "contributions": {
+                        "nodes": [{"occurredAt": "2025-03-10T10:00:00Z", "commitCount": 3}],
+                    },
+                },
+                {
+                    "repository": {"nameWithOwner": "user/secret",
+                                   "url": "https://github.com/user/secret", "isPrivate": True},
+                    "contributions": {
+                        "nodes": [
+                            {"occurredAt": "2025-03-02T10:00:00Z", "commitCount": 4},
+                            {"occurredAt": "2025-03-14T10:00:00Z", "commitCount": 7},
+                        ],
+                    },
+                },
+            ],
+        }
+        lines = render_activity(data, tz=_ET)
+        joined = "\n".join(lines)
+        assert "11 contributions in private repositories" in joined
+        assert "Mar 2" in joined
+        assert "Mar 14" in joined
+
+    def test_private_single_date(self):
+        data = {
+            "commitContributionsByRepository": [
+                {
+                    "repository": {"nameWithOwner": "user/secret",
+                                   "url": "https://github.com/user/secret", "isPrivate": True},
+                    "contributions": {
+                        "nodes": [{"occurredAt": "2025-03-02T10:00:00Z", "commitCount": 3}],
+                    },
+                },
+            ],
+        }
+        lines = render_activity(data, tz=_ET)
+        joined = "\n".join(lines)
+        assert "3 contributions in private repositories" in joined
+        # Single date, not a range
+        assert "–" not in joined
+        assert "Mar 2" in joined
+
+    def test_private_only_month(self):
+        """Month with only private activity still renders."""
+        data = {
+            "pullRequestContributionsByRepository": [
+                {
+                    "repository": {"nameWithOwner": "user/secret",
+                                   "url": "https://github.com/user/secret", "isPrivate": True},
+                    "contributions": {
+                        "nodes": [{"occurredAt": "2025-04-05T10:00:00Z"}],
+                    },
+                },
+            ],
+        }
+        lines = render_activity(data, tz=_ET)
+        joined = "\n".join(lines)
+        assert "April" in joined
+        assert "1 contribution in private repositories" in joined
+
+    def test_private_line_width(self):
+        """Private summary line must not exceed LINE_WIDTH (72)."""
+        data = {
+            "commitContributionsByRepository": [
+                {
+                    "repository": {"nameWithOwner": "user/secret",
+                                   "url": "https://github.com/user/secret", "isPrivate": True},
+                    "contributions": {
+                        "nodes": [
+                            {"occurredAt": "2025-03-01T10:00:00Z", "commitCount": 999},
+                            {"occurredAt": "2025-03-31T10:00:00Z", "commitCount": 1},
+                        ],
+                    },
+                },
+            ],
+        }
+        lines = render_activity(data, tz=_ET)
+        for line in lines:
+            assert visual_len(line) <= 72, f"Line too wide ({visual_len(line)}): {line!r}"
 
     def test_with_commit_data(self):
         data = {

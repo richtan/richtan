@@ -17,12 +17,22 @@ def render_activity(contributions_collection, tz=None):
         tz = _DEFAULT_TZ
     # --- Gather per-month data ---
     # commits_by_month: {(year, month): {nameWithOwner: {"url":..., "count":...}}}
+    private_by_month = defaultdict(lambda: {"count": 0, "min_date": None, "max_date": None})
+
     commits_by_month = defaultdict(lambda: defaultdict(lambda: {"url": "", "count": 0}))
     for entry in contributions_collection.get("commitContributionsByRepository", []):
         if entry is None:
             continue
         repo = entry.get("repository") or {}
         if repo.get("isPrivate", False):
+            for node in entry.get("contributions", {}).get("nodes", []):
+                if node is None:
+                    continue
+                dt = _parse_date(node.get("occurredAt", ""), tz)
+                if dt is None:
+                    continue
+                key = (dt.year, dt.month)
+                _track_private(private_by_month, key, node.get("commitCount", 0), dt)
             continue
         name = repo.get("nameWithOwner", "")
         url = repo.get("url", "")
@@ -43,6 +53,14 @@ def render_activity(contributions_collection, tz=None):
             continue
         repo = entry.get("repository") or {}
         if repo.get("isPrivate", False):
+            for node in entry.get("contributions", {}).get("nodes", []):
+                if node is None:
+                    continue
+                dt = _parse_date(node.get("occurredAt", ""), tz)
+                if dt is None:
+                    continue
+                key = (dt.year, dt.month)
+                _track_private(private_by_month, key, 1, dt)
             continue
         name = repo.get("nameWithOwner", "")
         url = repo.get("url", "")
@@ -63,6 +81,14 @@ def render_activity(contributions_collection, tz=None):
             continue
         repo = entry.get("repository") or {}
         if repo.get("isPrivate", False):
+            for node in entry.get("contributions", {}).get("nodes", []):
+                if node is None:
+                    continue
+                dt = _parse_date(node.get("occurredAt", ""), tz)
+                if dt is None:
+                    continue
+                key = (dt.year, dt.month)
+                _track_private(private_by_month, key, 1, dt)
             continue
         name = repo.get("nameWithOwner", "")
         url = repo.get("url", "")
@@ -83,6 +109,10 @@ def render_activity(contributions_collection, tz=None):
             continue
         repo = node.get("repository") or {}
         if repo.get("isPrivate", False):
+            dt = _parse_date(node.get("occurredAt", ""), tz)
+            if dt is not None:
+                key = (dt.year, dt.month)
+                _track_private(private_by_month, key, 1, dt)
             continue
         dt = _parse_date(node.get("occurredAt", ""), tz)
         if dt is None:
@@ -101,6 +131,7 @@ def render_activity(contributions_collection, tz=None):
     all_months.update(prs_by_month.keys())
     all_months.update(reviews_by_month.keys())
     all_months.update(repos_by_month.keys())
+    all_months.update(private_by_month.keys())
     sorted_months = sorted(all_months, reverse=True)[:3]
 
     # --- Render ---
@@ -169,7 +200,35 @@ def render_activity(contributions_collection, tz=None):
                 lines.append(f"  {branch}{link} {dots} {date_str}")
             lines.append("")
 
+        # Private contributions summary
+        private_data = private_by_month.get((year, month))
+        if private_data and private_data["count"] > 0:
+            count = private_data["count"]
+            noun = "contribution" if count == 1 else "contributions"
+            min_d = private_data["min_date"]
+            max_d = private_data["max_date"]
+            fmt = lambda d: d.strftime("%b %d").replace(" 0", " ")
+            date_str = fmt(min_d) if min_d.date() == max_d.date() else f"{fmt(min_d)} – {fmt(max_d)}"
+            label = f"  {count} {noun} in private repositories "
+            label_visual = visual_len(label)
+            date_visual = visual_len(date_str)
+            dots_needed = LINE_WIDTH - label_visual - 1 - date_visual
+            if dots_needed < 2:
+                dots_needed = 2
+            lines.append(f"{label}{'·' * dots_needed} {date_str}")
+            lines.append("")
+
     return lines
+
+
+def _track_private(private_by_month, key, count, dt):
+    """Track a private contribution for the given month key."""
+    entry = private_by_month[key]
+    entry["count"] += count
+    if entry["min_date"] is None or dt < entry["min_date"]:
+        entry["min_date"] = dt
+    if entry["max_date"] is None or dt > entry["max_date"]:
+        entry["max_date"] = dt
 
 
 def _parse_date(date_str, tz):
