@@ -98,7 +98,7 @@ def _render_card_lines(repo, username, inner_width=35):
                 max_nwo = inner_width - visual_len('Forked from ')
                 parent_nwo = visual_truncate(parent_nwo, max_nwo)
                 fork_text = f'Forked from {parent_nwo}'
-            lines.append(content_line(f'<ins>{fork_text}</ins>'))
+            lines.append(content_line(f'Forked from <ins>{parent_nwo}</ins>'))
 
     # Description lines (2 max)
     description = repo.get('description') or 'No description'
