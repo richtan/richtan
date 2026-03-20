@@ -88,6 +88,7 @@ def render_activity(contributions_collection):
             "name": repo.get("name", ""),
             "nameWithOwner": repo.get("nameWithOwner", ""),
             "url": repo.get("url", ""),
+            "date": dt,
         })
 
     # --- Collect all months and sort descending ---
@@ -153,7 +154,15 @@ def render_activity(contributions_collection):
                 branch = "└─ " if is_last else "├─ "
                 escaped_name = html.escape(repo["nameWithOwner"])
                 link = f'<a href="{repo["url"]}">{escaped_name}</a>'
-                lines.append(f"  {branch}{link}")
+                date_str = repo["date"].strftime("%b %-d")
+                prefix = f"  {branch}{link} "
+                prefix_visual = visual_len(prefix)
+                date_visual = len(date_str)
+                dots_needed = LINE_WIDTH - prefix_visual - date_visual
+                if dots_needed < 2:
+                    dots_needed = 2
+                dots = "·" * dots_needed
+                lines.append(f"  {branch}{link} {dots} {date_str}")
             lines.append("")
 
     return lines
