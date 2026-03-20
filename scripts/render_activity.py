@@ -2,7 +2,8 @@ import html
 import re
 import unicodedata
 from collections import defaultdict
-from datetime import datetime, timedelta, timezone
+from datetime import datetime
+from zoneinfo import ZoneInfo
 
 from render_pinned import visual_len, visual_pad
 
@@ -168,7 +169,7 @@ def render_activity(contributions_collection):
     return lines
 
 
-_ET = timezone(timedelta(hours=-5))
+_ET = ZoneInfo("America/New_York")
 
 
 def _parse_date(date_str):

@@ -7,7 +7,8 @@ import re
 import sys
 import tempfile
 import unicodedata
-from datetime import datetime, timedelta, timezone
+from datetime import datetime
+from zoneinfo import ZoneInfo
 
 from github_api import fetch_profile_data, fetch_username
 from render_activity import render_activity
@@ -86,8 +87,7 @@ def main():
     output_lines.extend(activity_lines)
 
     # Add timestamp
-    et = timezone(timedelta(hours=-5))
-    now = datetime.now(et)
+    now = datetime.now(ZoneInfo("America/New_York"))
     timestamp = now.strftime("%Y-%m-%d %H:%M ET")
     output_lines.append("")
     output_lines.append(f"<b>Last updated: {timestamp}</b>")
