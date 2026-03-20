@@ -8,9 +8,11 @@
 
 3. **Add the token as a repository secret** — In your forked repo, go to Settings → Secrets and variables → Actions → New repository secret. Name it `PROFILE_TOKEN` and paste your token.
 
-4. **Enable GitHub Actions** — Go to the Actions tab in your fork and click "I understand my workflows, go ahead and enable them."
+4. **Enable the workflow** — Go to the Actions tab in your fork, select "Update Profile" from the left sidebar, and click "Enable workflow".
 
-5. **Run the workflow** — In the Actions tab, select "Update Profile" from the left sidebar, click "Run workflow" → "Run workflow". Your profile README will be generated in about 15 seconds.
+5. **Run the workflow** — Click "Run workflow" → "Run workflow". Your profile README will be generated in about 15 seconds.
+
+6. **Share to Profile** — GitHub may prompt you to share the README to your profile. Click "Share to Profile" once the workflow has finished running, so your profile displays your own data instead of the template.
 
 The workflow runs automatically every 6 hours to keep your profile updated.
 
