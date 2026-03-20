@@ -35,13 +35,19 @@ gh repo create "$USERNAME" --template richtan/richtan --public
 
 ### Step 5: Create Personal Access Token
 
-The user must create a classic PAT with `read:user` scope. Direct them
-to this URL (scopes pre-selected):
+The user must create a classic PAT with `read:user` scope. For private
+contribution summaries, also add `repo` scope. Direct them to this URL
+(scopes pre-selected):
+
+https://github.com/settings/tokens/new?scopes=read:user,repo&description=Profile+README
+
+Classic tokens are required — fine-grained tokens have limited GraphQL
+support. Ask the user whether they want private contributions shown. If
+no, keep just `read:user` and use this URL instead:
 
 https://github.com/settings/tokens/new?scopes=read:user&description=Profile+README
 
-Classic tokens are required — fine-grained tokens have limited GraphQL
-support. Ask the user to paste the token.
+Ask the user to paste the token.
 
 ### Step 6: Set secret and configure
 

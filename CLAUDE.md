@@ -89,7 +89,7 @@ AGENTS.md              AI assistant setup runbook (auto-discovered by coding too
 
 | Secret | Where | Purpose |
 |--------|-------|---------|
-| `PROFILE_TOKEN` | GitHub Actions secret | PAT with `read:user` scope + repo write access for commit/push |
+| `PROFILE_TOKEN` | GitHub Actions secret | PAT with `read:user` scope + repo write access for commit/push. Optional: `repo` scope for private contribution summaries |
 | `APP_ID` | Worker secret | GitHub App ID |
 | `APP_PRIVATE_KEY` | Worker secret | PKCS8 PEM private key (imported via `jose`'s `importPKCS8`) |
 | `WEBHOOK_SECRET` | Worker secret | HMAC-SHA256 webhook validation |

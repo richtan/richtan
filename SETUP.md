@@ -13,6 +13,8 @@
 
 2. **Create a Personal Access Token (classic)** — Go to [Settings → Tokens (classic)](https://github.com/settings/tokens/new?scopes=read:user&description=Profile+README). Select the `read:user` scope. Classic tokens are required — fine-grained tokens have limited GraphQL API support.
 
+   > To include private contribution summaries in your activity timeline, also select the `repo` scope and enable "Include private contributions on my profile" in [GitHub profile settings](https://github.com/settings). This is optional — without it, only public activity is shown.
+
 3. **Add the token as a repository secret** — In your new repo, go to Settings → Secrets and variables → Actions → New repository secret. Name it `PROFILE_TOKEN` and paste your token.
 
    Or via CLI:
@@ -75,7 +77,7 @@ The `worker/` directory contains a Cloudflare Worker that triggers profile updat
 
 | Environment Variable | Default | Description |
 |---------------------|---------|-------------|
-| `GITHUB_TOKEN` | (required) | PAT with `read:user` scope |
+| `GITHUB_TOKEN` | (required) | PAT with `read:user` scope (add `repo` for private contribution summaries) |
 | `GITHUB_USERNAME` | auto-detected | Override the username to render |
 | `PROFILE_TIMEZONE` | `America/New_York` | Timezone for timestamps and date grouping (any IANA timezone, e.g., `Europe/London`, `Asia/Tokyo`) |
 
@@ -110,5 +112,6 @@ Resolve any conflicts, then push. Your `PROFILE_TOKEN` secret is preserved since
 - **"GITHUB_TOKEN not set"** — Make sure `PROFILE_TOKEN` is set in Settings → Secrets and variables → Actions.
 - **"Could not fetch user"** — Your token may be expired or missing the `read:user` scope. Generate a new one.
 - **"Rate limited"** — GitHub's GraphQL API rate-limits at 5,000 points/hour. Wait and retry, or use a less-scoped token.
+- **No private contributions shown** — Your token needs the `repo` scope, and "Include private contributions on my profile" must be enabled in [GitHub profile settings](https://github.com/settings). Regenerate the token with `repo` scope, update the `PROFILE_TOKEN` secret, and re-run the workflow.
 - **Webhook secret** — Use a random string of 32+ characters (e.g., `openssl rand -hex 32`).
 - **INSTALLATION_ID** — This is auto-detected from the GitHub App's first installation. Only set it manually if you have multiple installations.
