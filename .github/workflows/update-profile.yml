@@ -33,6 +33,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.PROFILE_TOKEN }}
           GITHUB_USERNAME: ${{ github.repository_owner }}
+          PROFILE_TIMEZONE: ${{ vars.PROFILE_TIMEZONE }}
 
       - name: Commit and push if changed
         run: |

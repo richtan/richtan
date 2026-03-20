@@ -44,6 +44,8 @@ worker/
 
 tests/                 pytest test suite
 
+AGENTS.md              AI assistant setup runbook (auto-discovered by coding tools)
+
 .github/
   workflows/update-profile.yml   CI workflow
   dependabot.yml                 Dependency updates

@@ -1,18 +1,33 @@
 # Setup
 
+> **Using an AI coding assistant?** Open this repo and ask it to set up your profile README — it will handle most steps automatically.
+
 ## Quick Start (5 minutes)
 
-1. **Fork this repo** — Click "Fork" and change the **Repository name** to your GitHub username (e.g., `alice` for `alice/alice`). This is required for GitHub to display it as your profile README.
+1. **Create from template** — Click "Use this template" → "Create a new repository" on the [richtan/richtan](https://github.com/richtan/richtan) repo page. Name the repository your exact GitHub username (e.g., `alice` for `alice/alice`). Set it to **Public**.
 
-2. **Create a Personal Access Token (classic)** — Go to [Settings → Developer settings → Personal access tokens → Tokens (classic)](https://github.com/settings/tokens/new). Select the `read:user` scope. Classic tokens are recommended because fine-grained tokens have limited GraphQL API support.
+   Or via CLI:
+   ```sh
+   gh repo create YOUR_USERNAME --template richtan/richtan --public
+   ```
 
-3. **Add the token as a repository secret** — In your forked repo, go to Settings → Secrets and variables → Actions → New repository secret. Name it `PROFILE_TOKEN` and paste your token.
+2. **Create a Personal Access Token (classic)** — Go to [Settings → Tokens (classic)](https://github.com/settings/tokens/new?scopes=read:user&description=Profile+README). Select the `read:user` scope. Classic tokens are required — fine-grained tokens have limited GraphQL API support.
 
-4. **Enable the workflow** — Go to the Actions tab in your fork, select "Update Profile" from the left sidebar, and click "Enable workflow".
+3. **Add the token as a repository secret** — In your new repo, go to Settings → Secrets and variables → Actions → New repository secret. Name it `PROFILE_TOKEN` and paste your token.
 
-5. **Run the workflow** — Click "Run workflow" → "Run workflow". Your profile README will be generated in about 15 seconds.
+   Or via CLI:
+   ```sh
+   gh secret set PROFILE_TOKEN --repo YOUR_USERNAME/YOUR_USERNAME
+   ```
 
-6. **Share to Profile** — GitHub may prompt you to share the README to your profile. Click "Share to Profile" once the workflow has finished running, so your profile displays your own data instead of the template.
+4. **Run the workflow** — Go to the Actions tab, select "Update Profile" from the left sidebar, click "Run workflow" → "Run workflow". Your profile README will be generated in about 15 seconds.
+
+   Or via CLI:
+   ```sh
+   gh workflow run update-profile.yml --repo YOUR_USERNAME/YOUR_USERNAME
+   ```
+
+5. **Share to Profile** — GitHub may prompt you to share the README to your profile. Click "Share to Profile" once the workflow has finished running, so your profile displays your own data instead of the template.
 
 The workflow runs automatically every 6 hours to keep your profile updated.
 
@@ -64,22 +79,36 @@ The `worker/` directory contains a Cloudflare Worker that triggers profile updat
 | `GITHUB_USERNAME` | auto-detected | Override the username to render |
 | `PROFILE_TIMEZONE` | `America/New_York` | Timezone for timestamps and date grouping (any IANA timezone, e.g., `Europe/London`, `Asia/Tokyo`) |
 
-To set `PROFILE_TIMEZONE` in GitHub Actions, add it to the workflow env block or as a repository variable.
+To set `PROFILE_TIMEZONE` in GitHub Actions, add it as a repository variable:
+
+```sh
+gh variable set PROFILE_TIMEZONE --repo YOUR_USERNAME/YOUR_USERNAME --body "Europe/London"
+```
+
+## Syncing with upstream
+
+To pull updates from the template repo into your copy:
+
+```sh
+cd YOUR_USERNAME
+git remote add upstream https://github.com/richtan/richtan.git
+git fetch upstream
+git merge upstream/main --allow-unrelated-histories
+```
+
+Resolve any conflicts, then push. Your `PROFILE_TOKEN` secret is preserved since secrets live in GitHub settings, not in the repo.
 
 ## Notes
 
 - **Python version**: 3.9 or later required (3.12 recommended). The workflow uses 3.12.
-- **Scheduled workflows on forks**: GitHub automatically disables scheduled workflows on forked repos after 60 days of inactivity. If your profile stops updating, go to Actions → "Update Profile" and re-enable it, or push any commit.
 - **Dependabot**: This repo includes `.github/dependabot.yml` which creates automated dependency update PRs. Delete it if you don't want these.
 - **Local development**: Run `GITHUB_TOKEN=<your-pat> python scripts/generate.py` from the repo root to preview changes locally.
 - **Running tests**: `pip install -r requirements-dev.txt && pytest`
-- **Syncing with upstream**: When your fork falls behind, click **Sync fork** on your repo's main page. If there are conflicts (from automated README updates), click **Discard N commits** — this is safe because the Action will regenerate README.md on its next run. Your `PROFILE_TOKEN` secret is preserved since secrets live in GitHub settings, not in the repo.
 
 ## Troubleshooting
 
 - **"GITHUB_TOKEN not set"** — Make sure `PROFILE_TOKEN` is set in Settings → Secrets and variables → Actions.
 - **"Could not fetch user"** — Your token may be expired or missing the `read:user` scope. Generate a new one.
 - **"Rate limited"** — GitHub's GraphQL API rate-limits at 5,000 points/hour. Wait and retry, or use a less-scoped token.
-- **Workflow shows as disabled** — GitHub disables scheduled workflows after 60 days of fork inactivity. Re-enable it in the Actions tab.
 - **Webhook secret** — Use a random string of 32+ characters (e.g., `openssl rand -hex 32`).
 - **INSTALLATION_ID** — This is auto-detected from the GitHub App's first installation. Only set it manually if you have multiple installations.
