@@ -29,8 +29,9 @@ The `worker/` directory contains a Cloudflare Worker that triggers profile updat
    - Set a Homepage URL (can be your profile)
    - Set a Webhook URL (your worker URL, added after deploy)
    - Webhook secret: generate a random string
-   - Permissions: Contents (read & write), Metadata (read)
-   - Subscribe to events: Pull requests, Pull request reviews, Repositories
+   - Permissions: Contents (read & write), Issues (read), Metadata (read)
+   - Subscribe to events: Forks, Issues, Pull requests, Pull request reviews, Pushes, Repositories, Stars
+     - Note: The Issues event only appears after enabling the Issues permission above
    - Install the app on your profile repo
 
 2. **Deploy the worker**:

@@ -9,7 +9,7 @@ Three components work together:
 ### 1. Cloudflare Worker (`worker/`)
 Receives GitHub webhooks and dispatches profile updates.
 
-- **HTTP handler** (`fetch`): POST only. Validates HMAC-SHA256 signature (timing-safe via `crypto.subtle.timingSafeEqual`). Filters events through allowlist: `repository:created`, `pull_request:opened/closed/reopened`, `pull_request_review:*` (all actions). Forwards accepted events to the `ProfileDebounce` Durable Object singleton.
+- **HTTP handler** (`fetch`): POST only. Validates HMAC-SHA256 signature (timing-safe via `crypto.subtle.timingSafeEqual`). Filters events through allowlist: `push`, `repository:*` (all actions), `pull_request:opened/closed/reopened`, `pull_request_review:*` (all actions), `star:*`, `fork`, `issues:opened/closed`. Forwards accepted events to the `ProfileDebounce` Durable Object singleton.
 - **Scheduled handler** (every 12h, configured in `wrangler.toml`): Generates GitHub App JWT → gets installation token → triggers workflow via `POST /repos/.../actions/workflows/update-profile.yml/dispatches` (`workflow_dispatch` API, `ref: "main"`).
 - **Durable Object `ProfileDebounce`**: Uses SQLite storage (not KV). Three tables: `deliveries` (replay protection, 5-min TTL), `dispatches` (rate tracking), `state` (alarm flag). Replay protection rejects duplicate `X-GitHub-Delivery` IDs. Rate limit: max 30 dispatches/hour. First-event-wins debounce: sets a 60-second alarm, ignores subsequent events while alarm is pending. On alarm: gets installation token → dispatches via `POST /repos/.../dispatches` (`repository_dispatch` API, `event_type: "profile-update"`). Cleanup: removes records >24h old.
 
@@ -153,48 +153,17 @@ CI will regenerate and commit README.md automatically. This avoids rebase confli
 - GraphQL username is string-interpolated, not parameterized — this is intentional (it's the authenticated user's own username)
 - The Worker uses two different GitHub dispatch APIs: `workflow_dispatch` for scheduled runs, `repository_dispatch` for webhook-triggered runs
 
-## Webhook Coverage Gaps
+## Webhook Coverage
 
-The worker's `ALLOWED_EVENTS` allowlist only covers 3 event types. Many profile-affecting changes are only picked up by the 6h/12h cron.
+The worker's `ALLOWED_EVENTS` covers 7 event types: `push`, `repository` (all actions), `pull_request` (opened/closed/reopened), `pull_request_review` (all actions), `star`, `fork`, and `issues` (opened/closed). The debounce/rate-limiting infrastructure handles high-frequency events like `push` and `star`.
 
 ### Covered triggers
 
-- **Webhook**: `repository:created`, `pull_request:opened/closed/reopened`, `pull_request_review:*` (all actions)
+- **Webhook**: `push`, `repository:*` (all actions), `pull_request:opened/closed/reopened`, `pull_request_review:*`, `star:*`, `fork`, `issues:opened/closed`
 - **Cron**: Actions schedule (every 6h), Worker scheduled handler (every 12h)
 - **Code push**: `scripts/**` on main (triggers Actions workflow)
 
-### Gaps by rendered section
+### Remaining gaps (no webhook exists)
 
-**Pinned repo cards** — all silent (no webhook triggers):
-- Pin/unpin repos — **no webhook event exists at all**
-- Edit repo description — `repository:edited` exists, not in allowlist
-- Rename repo — `repository:renamed` exists, not in allowlist
-- Primary language change (via code push) — `push` exists, not in allowlist
-- Star count changes — `star:created/deleted` exists, not in allowlist
-- Fork count changes — `fork` exists, not in allowlist
-- Repo visibility change — `repository:privatized/publicized` exist, not in allowlist
-- Archive/unarchive — `repository:archived/unarchived` exist, not in allowlist
-- Delete repo — `repository:deleted` exists, not in allowlist
-
-**Contribution graph** — mostly silent:
-- Push commits — `push` exists, not in allowlist. **Primary contribution type, completely uncovered.**
-- Create issues — `issues` exists, not in allowlist
-
-**Activity timeline** — commits are silent:
-- Commits (largest timeline category) — same `push` gap
-- PRs and reviews are covered; repo creation is covered
-
-**Popular repos fallback** — same gaps as pinned cards, plus star ranking shifts are silent
-
-### No webhook exists (cannot fix by expanding allowlist)
-
-- Pin/unpin repos on profile
+- Pin/unpin repos on profile — **no webhook event exists**
 - Profile bio/avatar/status changes (not rendered, but worth noting)
-
-### High-value events to consider adding
-
-1. `push` — closes the commit gap (biggest single improvement)
-2. `repository` actions: `edited`, `renamed`, `privatized`, `publicized`, `archived`, `deleted` — closes all repo metadata gaps
-3. `star` — star count changes (high frequency, may need rate limiting care)
-4. `fork` — fork count changes
-5. `issues:opened/closed` — issue contributions

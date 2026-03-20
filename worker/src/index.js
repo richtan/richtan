@@ -7,9 +7,13 @@ import { importPKCS8, SignJWT } from "jose";
 const USER_AGENT = "profile-webhook-worker";
 
 const ALLOWED_EVENTS = {
-  repository: new Set(["created"]),
+  push: null,                    // commits (no action field)
+  repository: null,              // created, edited, renamed, privatized, publicized, archived, deleted
   pull_request: new Set(["opened", "closed", "reopened"]),
-  pull_request_review: null, // null = all actions allowed
+  pull_request_review: null,     // all actions
+  star: null,                    // created, deleted (no action filtering needed)
+  fork: null,                    // fork events (no action field)
+  issues: new Set(["opened", "closed"]),
 };
 
 async function generateJWT(env) {
