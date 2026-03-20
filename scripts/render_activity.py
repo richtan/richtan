@@ -159,7 +159,7 @@ def render_activity(contributions_collection):
                 prefix = f"  {branch}{link} "
                 prefix_visual = visual_len(prefix)
                 date_visual = len(date_str)
-                dots_needed = LINE_WIDTH - prefix_visual - date_visual
+                dots_needed = LINE_WIDTH - prefix_visual - 1 - date_visual
                 if dots_needed < 2:
                     dots_needed = 2
                 dots = "·" * dots_needed
