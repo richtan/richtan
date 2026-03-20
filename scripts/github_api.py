@@ -1,9 +1,13 @@
+import re
 import sys
 from datetime import datetime, timedelta, timezone
 
 import requests
 
 GITHUB_GRAPHQL_URL = "https://api.github.com/graphql"
+
+# GitHub username: 1-39 alphanumeric/hyphens, starts and ends with alphanumeric
+_USERNAME_RE = re.compile(r'^[a-zA-Z0-9]([a-zA-Z0-9-]{0,37}[a-zA-Z0-9])?$')
 
 
 def fetch_username(token):
@@ -27,93 +31,95 @@ def fetch_username(token):
     return data["login"]
 
 PROFILE_QUERY = """
-query($from: DateTime!, $to: DateTime!) {{
-  user(login: "{username}") {{
-    pinnedItems(first: 6, types: REPOSITORY) {{
-      nodes {{
-        ... on Repository {{
+query($login: String!, $from: DateTime!, $to: DateTime!) {
+  user(login: $login) {
+    pinnedItems(first: 6, types: REPOSITORY) {
+      nodes {
+        ... on Repository {
           name
           nameWithOwner
           url
           description
           isPrivate
           isFork
-          parent {{ nameWithOwner }}
-          primaryLanguage {{ name }}
+          parent { nameWithOwner }
+          primaryLanguage { name }
           stargazerCount
           forkCount
-        }}
-      }}
-    }}
-    repositories(first: 6, ownerAffiliations: [OWNER], orderBy: {{field: STARGAZERS, direction: DESC}}, privacy: PUBLIC) {{
-      nodes {{
+        }
+      }
+    }
+    repositories(first: 6, ownerAffiliations: [OWNER], orderBy: {field: STARGAZERS, direction: DESC}, privacy: PUBLIC) {
+      nodes {
         name
         nameWithOwner
         url
         description
         isPrivate
         isFork
-        parent {{ nameWithOwner }}
-        primaryLanguage {{ name }}
+        parent { nameWithOwner }
+        primaryLanguage { name }
         stargazerCount
         forkCount
-      }}
-    }}
-    contributionsCollection(from: $from, to: $to) {{
+      }
+    }
+    contributionsCollection(from: $from, to: $to) {
       totalCommitContributions
       totalPullRequestContributions
       totalPullRequestReviewContributions
       totalIssueContributions
       totalRepositoriesWithContributedCommits
-      contributionCalendar {{
+      contributionCalendar {
         totalContributions
-        months {{ name firstDay totalWeeks }}
-        weeks {{
-          contributionDays {{
+        months { name firstDay totalWeeks }
+        weeks {
+          contributionDays {
             contributionCount
             contributionLevel
             date
             weekday
-          }}
-        }}
-      }}
-      commitContributionsByRepository(maxRepositories: 10) {{
-        repository {{ name nameWithOwner url isPrivate }}
-        contributions(first: 100) {{
+          }
+        }
+      }
+      commitContributionsByRepository(maxRepositories: 10) {
+        repository { name nameWithOwner url isPrivate }
+        contributions(first: 100) {
           totalCount
-          nodes {{ occurredAt commitCount }}
-        }}
-      }}
-      pullRequestContributionsByRepository(maxRepositories: 5) {{
-        repository {{ name nameWithOwner url isPrivate }}
-        contributions(first: 100) {{
+          nodes { occurredAt commitCount }
+        }
+      }
+      pullRequestContributionsByRepository(maxRepositories: 5) {
+        repository { name nameWithOwner url isPrivate }
+        contributions(first: 100) {
           totalCount
-          nodes {{ occurredAt }}
-        }}
-      }}
-      pullRequestReviewContributionsByRepository(maxRepositories: 5) {{
-        repository {{ name nameWithOwner url isPrivate }}
-        contributions(first: 100) {{
+          nodes { occurredAt }
+        }
+      }
+      pullRequestReviewContributionsByRepository(maxRepositories: 5) {
+        repository { name nameWithOwner url isPrivate }
+        contributions(first: 100) {
           totalCount
-          nodes {{ occurredAt }}
-        }}
-      }}
-      repositoryContributions(first: 10) {{
+          nodes { occurredAt }
+        }
+      }
+      repositoryContributions(first: 10) {
         totalCount
-        nodes {{
+        nodes {
           occurredAt
-          repository {{ name nameWithOwner url isPrivate }}
-        }}
-      }}
-    }}
-  }}
-}}
+          repository { name nameWithOwner url isPrivate }
+        }
+      }
+    }
+  }
+}
 """
 
 
 def fetch_profile_data(token, username):
     if not token:
         sys.exit("GITHUB_TOKEN not set")
+    if not _USERNAME_RE.match(username):
+        sys.exit(f"Invalid GitHub username: {username!r}")
 
     print(f"Fetching profile data for {username}...")
 
@@ -121,23 +127,28 @@ def fetch_profile_data(token, username):
     from_date = now - timedelta(days=366)
 
     variables = {
+        "login": username,
         "from": from_date.strftime("%Y-%m-%dT%H:%M:%SZ"),
         "to": now.strftime("%Y-%m-%dT%H:%M:%SZ"),
     }
 
-    query = PROFILE_QUERY.format(username=username)
-
-    response = requests.post(
-        GITHUB_GRAPHQL_URL,
-        json={"query": query, "variables": variables},
-        headers={"Authorization": f"bearer {token}"},
-        timeout=30,
-    )
+    try:
+        response = requests.post(
+            GITHUB_GRAPHQL_URL,
+            json={"query": PROFILE_QUERY, "variables": variables},
+            headers={"Authorization": f"bearer {token}"},
+            timeout=30,
+        )
+    except requests.exceptions.RequestException as e:
+        sys.exit(f"GitHub API request failed: {e}")
 
     if response.status_code != 200:
         sys.exit(f"GitHub API returned HTTP {response.status_code}")
 
-    data = response.json()
+    try:
+        data = response.json()
+    except (ValueError, requests.exceptions.JSONDecodeError):
+        sys.exit("Failed to parse GitHub API response")
 
     if "errors" in data:
         errors = data["errors"]

@@ -10,6 +10,13 @@ from render_pinned import visual_len, visual_pad
 LINE_WIDTH = 72
 
 
+def safe_href(url):
+    """Return an HTML-safe href value, or '#' if the URL scheme is invalid."""
+    if url and url.startswith(("https://", "http://")):
+        return html.escape(url)
+    return "#"
+
+
 def render_activity(contributions_collection):
     """Render the contribution activity timeline. Returns list of text lines."""
     # --- Gather per-month data ---
@@ -154,7 +161,7 @@ def render_activity(contributions_collection):
                 is_last = (i == len(month_repos) - 1)
                 branch = "└─ " if is_last else "├─ "
                 escaped_name = html.escape(repo["nameWithOwner"])
-                link = f'<a href="{repo["url"]}">{escaped_name}</a>'
+                link = f'<a href="{safe_href(repo["url"])}">{escaped_name}</a>'
                 date_str = repo["date"].strftime("%b %-d")
                 prefix = f"  {branch}{link} "
                 prefix_visual = visual_len(prefix)
@@ -194,7 +201,7 @@ def _render_repo_lines(sorted_repos, show_count=True):
         is_last = (i == len(sorted_repos) - 1)
         branch = "└─ " if is_last else "├─ "
         escaped_name = html.escape(name)
-        link = f'<a href="{info["url"]}">{escaped_name}</a>'
+        link = f'<a href="{safe_href(info["url"])}">{escaped_name}</a>'
 
         if show_count:
             count_str = f" {info['count']}"

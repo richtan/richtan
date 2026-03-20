@@ -1,4 +1,6 @@
-import re, html, unicodedata
+import html
+import re
+import unicodedata
 
 
 def visual_len(text):
@@ -66,6 +68,13 @@ def word_wrap(text, max_width):
     return lines if lines else ['']
 
 
+def safe_href(url):
+    """Return an HTML-safe href value, or '#' if the URL scheme is invalid."""
+    if url and url.startswith(("https://", "http://")):
+        return html.escape(url)
+    return "#"
+
+
 def _render_card_lines(repo, username, inner_width=35):
     """Render a single repo card as a list of strings (each 39 chars wide)."""
     top = '┌' + '─' * (inner_width + 2) + '┐'
@@ -86,7 +95,7 @@ def _render_card_lines(repo, username, inner_width=35):
         display_name = name
 
     truncated_name = visual_truncate(display_name, 30)
-    name_link = f'<a href="{url}"><b>{html.escape(truncated_name)}</b></a>'
+    name_link = f'<a href="{safe_href(url)}"><b>{html.escape(truncated_name)}</b></a>'
     lines.append(content_line(name_link))
 
     # Fork line (only if fork with known parent)
@@ -98,7 +107,7 @@ def _render_card_lines(repo, username, inner_width=35):
                 max_nwo = inner_width - visual_len('Forked from ')
                 parent_nwo = visual_truncate(parent_nwo, max_nwo)
                 fork_text = f'Forked from {parent_nwo}'
-            lines.append(content_line(f'Forked from <ins>{parent_nwo}</ins>'))
+            lines.append(content_line(f'Forked from <ins>{html.escape(parent_nwo)}</ins>'))
 
     # Description lines (2 max)
     description = repo.get('description') or 'No description'

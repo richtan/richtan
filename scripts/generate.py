@@ -2,11 +2,13 @@
 """Fetch GitHub profile data, render text art, and update README.md."""
 
 import hashlib
+import html
 import os
 import re
 import sys
 import tempfile
 import unicodedata
+import urllib.parse
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
@@ -91,7 +93,9 @@ def main():
     timestamp = now.strftime("%Y-%m-%d %H:%M ET")
     output_lines.append("")
     output_lines.append(f"<b>Last updated: {timestamp}</b>")
-    output_lines.append(f"<b>Powered by <a href=\"https://github.com/{username}/{username}\">{username}/{username}</a></b>")
+    safe_user = html.escape(username)
+    url_user = urllib.parse.quote(username, safe='')
+    output_lines.append(f"<b>Powered by <a href=\"https://github.com/{url_user}/{url_user}\">{safe_user}/{safe_user}</a></b>")
 
     # Validate
     if not validate_output(output_lines):
@@ -130,26 +134,34 @@ def main():
         print("No changes detected (hash match). Skipping update.")
         sys.exit(0)
 
-    # Replace content between markers
+    # Replace content between markers (lambda avoids backslash interpretation)
     pattern = re.escape(MARKER_START) + r".*?" + re.escape(MARKER_END)
     replacement = f"{MARKER_START}\n<!-- hash:{new_hash} -->\n{rendered}\n{MARKER_END}"
-    new_readme = re.sub(pattern, replacement, readme, flags=re.DOTALL)
+    new_readme = re.sub(pattern, lambda m: replacement, readme, flags=re.DOTALL)
 
     # Atomic write
     print("Writing updated README...")
     dir_name = os.path.dirname(README_PATH)
-    with tempfile.NamedTemporaryFile(
-        mode="w",
-        encoding="utf-8",
-        dir=dir_name,
-        prefix=".",
-        suffix=".tmp",
-        delete=False,
-    ) as tmp:
-        tmp.write(new_readme)
-        tmp_path = tmp.name
+    try:
+        with tempfile.NamedTemporaryFile(
+            mode="w",
+            encoding="utf-8",
+            dir=dir_name,
+            prefix=".",
+            suffix=".tmp",
+            delete=False,
+        ) as tmp:
+            tmp.write(new_readme)
+            tmp_path = tmp.name
 
-    os.rename(tmp_path, README_PATH)
+        os.replace(tmp_path, README_PATH)
+    except Exception:
+        # Clean up temp file on failure
+        try:
+            os.unlink(tmp_path)
+        except OSError:
+            pass
+        raise
     print(f"README updated successfully. Hash: {new_hash}")
 
 
