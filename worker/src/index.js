@@ -4,7 +4,6 @@ import { importPKCS8, SignJWT } from "jose";
 // Helpers
 // ---------------------------------------------------------------------------
 
-const DISPATCH_REPO = "richtan/richtan";
 const USER_AGENT = "profile-webhook-worker";
 
 const ALLOWED_EVENTS = {
@@ -148,10 +147,15 @@ export default {
   },
 
   async scheduled(event, env, ctx) {
+    const repo = env.DISPATCH_REPO;
+    if (!repo || !repo.includes("/")) {
+      console.error("DISPATCH_REPO not set or invalid (expected 'owner/repo')");
+      return;
+    }
     try {
       const token = await getInstallationToken(env);
       await fetch(
-        `https://api.github.com/repos/${DISPATCH_REPO}/actions/workflows/update-profile.yml/dispatches`,
+        `https://api.github.com/repos/${repo}/actions/workflows/update-profile.yml/dispatches`,
         {
           method: "POST",
           headers: {
@@ -248,10 +252,16 @@ export class ProfileDebounce {
   }
 
   async alarm() {
+    const repo = this.env.DISPATCH_REPO;
+    if (!repo || !repo.includes("/")) {
+      console.error("DISPATCH_REPO not set or invalid (expected 'owner/repo')");
+      this.sql.exec("DELETE FROM state WHERE key = 'alarm_pending'");
+      return;
+    }
     try {
       const token = await getInstallationToken(this.env);
       await fetch(
-        `https://api.github.com/repos/${DISPATCH_REPO}/dispatches`,
+        `https://api.github.com/repos/${repo}/dispatches`,
         {
           method: "POST",
           headers: {

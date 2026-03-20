@@ -10,5 +10,8 @@ class_name = "ProfileDebounce"
 tag = "v1"
 new_sqlite_classes = ["ProfileDebounce"]
 
+[vars]
+DISPATCH_REPO = "richtan/richtan"
+
 [triggers]
 crons = ["0 */12 * * *"]

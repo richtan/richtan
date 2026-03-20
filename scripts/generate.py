@@ -2,7 +2,6 @@
 """Fetch GitHub profile data, render text art, and update README.md."""
 
 import hashlib
-import html
 import os
 import re
 import sys
@@ -10,7 +9,7 @@ import tempfile
 import unicodedata
 from datetime import datetime, timezone
 
-from github_api import fetch_profile_data
+from github_api import fetch_profile_data, fetch_username
 from render_activity import render_activity
 from render_graph import render_graph
 from render_pinned import render_pinned, visual_len
@@ -28,14 +27,6 @@ def sanitize(text):
     return text
 
 
-def escape_markdown(text):
-    """Escape backticks and markdown metacharacters."""
-    text = text.replace("`", "&#96;")
-    text = text.replace("[", "&#91;")
-    text = text.replace("]", "&#93;")
-    return text
-
-
 def validate_output(lines):
     """Basic validation of generated output."""
     text = "\n".join(lines)
@@ -47,10 +38,11 @@ def validate_output(lines):
 
 def main():
     token = os.environ.get("GITHUB_TOKEN")
-    username = os.environ.get("GITHUB_USERNAME", "richtan")
 
     if not token:
         sys.exit("GITHUB_TOKEN not set")
+
+    username = os.environ.get("GITHUB_USERNAME", "").strip() or fetch_username(token)
 
     # Fetch data
     data = fetch_profile_data(token, username)
@@ -71,7 +63,7 @@ def main():
 
     # Render sections
     print("Rendering pinned repos...")
-    pinned_lines = render_pinned(pinned_repos)
+    pinned_lines = render_pinned(pinned_repos, username)
 
     print("Rendering contribution graph...")
     graph_lines = render_graph(contributions)

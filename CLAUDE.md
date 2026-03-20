@@ -19,7 +19,6 @@ Note the two different dispatch APIs: scheduled handler uses `workflow_dispatch`
 Triggers: `schedule` (every 6h), `repository_dispatch: profile-update` (from webhook), `workflow_dispatch` (from Worker scheduled + manual), `push` to `scripts/**` on main.
 
 - Concurrency group `profile-update`, cancels in-progress runs
-- Guard: `if: github.repository == 'richtan/richtan'`
 - Steps: checkout → Python 3.12 (pip cached) → install deps → run `generate.py` → commit as `github-actions[bot]` → push with 3-retry rebase loop
 
 ### 3. Python Pipeline (`scripts/`)
@@ -50,7 +49,7 @@ worker/
 
 ### `generate.py`
 - Fetches data, filters private repos from pinned items
-- Sanitizes text: NFC normalization, strips null bytes/control chars, escapes markdown metacharacters (backticks, brackets)
+- Sanitizes text: NFC normalization, strips null bytes/control chars
 - Renders three sections: pinned → graph → activity
 - Validates output is non-empty, warns if any line exceeds 80 visual chars
 - SHA256 hash dedup: hashes the rendered `<pre>` block, compares to `<!-- hash:... -->` comment in existing README, skips write if unchanged
@@ -78,7 +77,7 @@ worker/
 - Groups commits/PRs/reviews/repos-created by (year, month), sorted reverse chronological
 - Tree formatting: `├─` / `└─` branches
 - Dot-leader alignment at `LINE_WIDTH=72`
-- Filters private repos independently (commits and repos-created)
+- Filters private repos independently (commits, PRs, reviews, and repos-created)
 - Imports `visual_len`/`visual_pad` from `render_pinned`
 
 ## Secrets
@@ -117,7 +116,16 @@ cd worker && npm install && npx wrangler dev
 
 ### Deploy worker
 ```sh
-cd worker && npx wrangler deploy
+cd worker && npm install
+```
+Edit `wrangler.toml` and set `DISPATCH_REPO` to your `username/username`:
+```toml
+[vars]
+DISPATCH_REPO = "yourusername/yourusername"
+```
+Then deploy:
+```sh
+npx wrangler deploy
 wrangler secret put APP_ID
 wrangler secret put APP_PRIVATE_KEY
 wrangler secret put WEBHOOK_SECRET
@@ -138,7 +146,7 @@ CI will regenerate and commit README.md automatically. This avoids rebase confli
 
 - All rendering targets max 80 visual chars per line
 - `visual_len()` is the source of truth for display width — always use it, not `len()`
-- Private repos are filtered in two places: `generate.py` (pinned items) and `render_activity.py` (commits, repos created)
+- Private repos are filtered in two places: `generate.py` (pinned items) and `render_activity.py` (commits, PRs, reviews, repos created)
 - README content lives between `<!-- PROFILE START -->` / `<!-- PROFILE END -->` markers
 - `<!-- hash:... -->` comment enables change detection to skip no-op updates
 - Atomic writes prevent README corruption (temp file + `os.rename`)

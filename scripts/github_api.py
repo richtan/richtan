@@ -5,6 +5,27 @@ import requests
 
 GITHUB_GRAPHQL_URL = "https://api.github.com/graphql"
 
+
+def fetch_username(token):
+    """Auto-detect the authenticated user's login via REST API."""
+    try:
+        resp = requests.get(
+            "https://api.github.com/user",
+            headers={"Authorization": f"bearer {token}"},
+            timeout=10,
+        )
+    except requests.exceptions.RequestException as e:
+        sys.exit(f"Failed to fetch user: {e}")
+    if resp.status_code != 200:
+        sys.exit(f"Failed to fetch user: HTTP {resp.status_code}")
+    try:
+        data = resp.json()
+    except ValueError:
+        sys.exit("Failed to parse user API response")
+    if "login" not in data:
+        sys.exit("Failed to detect username from token")
+    return data["login"]
+
 PROFILE_QUERY = """
 query($from: DateTime!, $to: DateTime!) {{
   user(login: "{username}") {{
@@ -49,14 +70,14 @@ query($from: DateTime!, $to: DateTime!) {{
         }}
       }}
       pullRequestContributionsByRepository(maxRepositories: 5) {{
-        repository {{ name nameWithOwner url }}
+        repository {{ name nameWithOwner url isPrivate }}
         contributions(first: 100) {{
           totalCount
           nodes {{ occurredAt }}
         }}
       }}
       pullRequestReviewContributionsByRepository(maxRepositories: 5) {{
-        repository {{ name nameWithOwner url }}
+        repository {{ name nameWithOwner url isPrivate }}
         contributions(first: 100) {{
           totalCount
           nodes {{ occurredAt }}
@@ -66,7 +87,7 @@ query($from: DateTime!, $to: DateTime!) {{
         totalCount
         nodes {{
           occurredAt
-          repository {{ name nameWithOwner url }}
+          repository {{ name nameWithOwner url isPrivate }}
         }}
       }}
     }}

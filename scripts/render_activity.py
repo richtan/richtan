@@ -38,6 +38,8 @@ def render_activity(contributions_collection):
         if entry is None:
             continue
         repo = entry.get("repository") or {}
+        if repo.get("isPrivate", False):
+            continue
         name = repo.get("nameWithOwner", "")
         url = repo.get("url", "")
         for node in entry.get("contributions", {}).get("nodes", []):
@@ -56,6 +58,8 @@ def render_activity(contributions_collection):
         if entry is None:
             continue
         repo = entry.get("repository") or {}
+        if repo.get("isPrivate", False):
+            continue
         name = repo.get("nameWithOwner", "")
         url = repo.get("url", "")
         for node in entry.get("contributions", {}).get("nodes", []):

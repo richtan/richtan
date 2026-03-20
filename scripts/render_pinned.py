@@ -66,7 +66,7 @@ def word_wrap(text, max_width):
     return lines if lines else ['']
 
 
-def _render_card_lines(repo, inner_width=35):
+def _render_card_lines(repo, username, inner_width=35):
     """Render a single repo card as a list of strings (each 39 chars wide)."""
     top = '┌' + '─' * (inner_width + 2) + '┐'
     bottom = '└' + '─' * (inner_width + 2) + '┘'
@@ -80,13 +80,13 @@ def _render_card_lines(repo, inner_width=35):
     name = repo.get('name', '')
     url = repo.get('url', '')
     name_with_owner = repo.get('nameWithOwner', name)
-    if not name_with_owner.startswith('richtan/'):
+    if not name_with_owner.lower().startswith(f'{username.lower()}/'):
         display_name = name_with_owner
     else:
         display_name = name
 
     truncated_name = visual_truncate(display_name, 30)
-    name_link = f'<a href="{url}"><b>{truncated_name}</b></a>'
+    name_link = f'<a href="{url}"><b>{html.escape(truncated_name)}</b></a>'
     lines.append(content_line(name_link))
 
     # Description lines (2 max)
@@ -139,7 +139,7 @@ def _render_card_lines(repo, inner_width=35):
     return lines
 
 
-def render_pinned(pinned_repos):
+def render_pinned(pinned_repos, username):
     """Render pinned repos as 2-column box-drawn text art. Returns list of strings."""
     if not pinned_repos:
         return []
@@ -153,8 +153,8 @@ def render_pinned(pinned_repos):
             pairs.append((pinned_repos[i], None))
 
     for left_repo, right_repo in pairs:
-        left_lines = _render_card_lines(left_repo)
-        right_lines = _render_card_lines(right_repo) if right_repo else None
+        left_lines = _render_card_lines(left_repo, username)
+        right_lines = _render_card_lines(right_repo, username) if right_repo else None
 
         for j in range(len(left_lines)):
             if right_lines:
