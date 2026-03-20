@@ -73,7 +73,7 @@ def main():
 
     # Sanitize dynamic text
     for repo in pinned_repos:
-        repo["description"] = sanitize(repo.get("description") or "No description")
+        repo["description"] = sanitize(repo.get("description") or "")
         repo["name"] = sanitize(repo.get("name", ""))
         repo["nameWithOwner"] = sanitize(repo.get("nameWithOwner", ""))
         if repo.get("parent") and repo["parent"].get("nameWithOwner"):

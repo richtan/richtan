@@ -41,7 +41,7 @@ def _render_card_lines(repo, username, inner_width=35):
             lines.append(content_line(f'Forked from <ins>{html.escape(parent_nwo)}</ins>'))
 
     # Description lines (2 max)
-    description = repo.get('description') or 'No description'
+    description = repo.get('description') or ''
     escaped_desc = html.escape(description)
     desc_lines = word_wrap(escaped_desc, inner_width)
     if len(desc_lines) > 2:

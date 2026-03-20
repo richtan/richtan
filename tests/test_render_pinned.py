@@ -53,9 +53,9 @@ class TestDescriptionWrapping:
     def test_no_description(self):
         repo = _make_repo(description=None)
         lines = _render_card_lines(repo, "user")
-        # Should show "No description"
+        # Should show blank lines instead of "No description"
         joined = "\n".join(lines)
-        assert "No description" in joined
+        assert "No description" not in joined
 
 
 class TestForkDisplay:

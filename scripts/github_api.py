@@ -165,7 +165,7 @@ def fetch_profile_data(token, username):
     # Apply nullable defaults to pinned repos
     for repo in user["pinnedItems"]["nodes"]:
         if not repo.get("description"):
-            repo["description"] = "No description"
+            repo["description"] = ""
         repo["primaryLanguage"] = (
             repo["primaryLanguage"]["name"] if repo.get("primaryLanguage") else None
         )
@@ -173,7 +173,7 @@ def fetch_profile_data(token, username):
     # Apply nullable defaults to popular repos (fallback for empty pinned)
     for repo in user.get("repositories", {}).get("nodes", []):
         if not repo.get("description"):
-            repo["description"] = "No description"
+            repo["description"] = ""
         repo["primaryLanguage"] = (
             repo["primaryLanguage"]["name"] if repo.get("primaryLanguage") else None
         )
