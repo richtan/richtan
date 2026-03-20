@@ -2,7 +2,7 @@ import html
 import re
 import unicodedata
 from collections import defaultdict
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 
 from render_pinned import visual_len, visual_pad
 
@@ -168,12 +168,16 @@ def render_activity(contributions_collection):
     return lines
 
 
+_ET = timezone(timedelta(hours=-5))
+
+
 def _parse_date(date_str):
-    """Parse an ISO 8601 date string into a datetime, or None."""
+    """Parse an ISO 8601 date string into a datetime in ET, or None."""
     if not date_str:
         return None
     try:
-        return datetime.fromisoformat(date_str.replace("Z", "+00:00"))
+        dt = datetime.fromisoformat(date_str.replace("Z", "+00:00"))
+        return dt.astimezone(_ET)
     except (ValueError, AttributeError):
         return None
 
