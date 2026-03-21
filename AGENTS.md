@@ -82,24 +82,16 @@ will need it in the next step. Remind them the token is only shown once.
 
 ### Step 6: Set secret and configure
 
-Create the secret with a placeholder value:
-
-```sh
-gh secret set PROFILE_TOKEN --repo "USERNAME/USERNAME" --body "placeholder"
-```
-
-(Substitute the literal username.)
-
-Then direct the user to update it with their real token:
+Direct the user to add the token as a repository secret:
 
 ```
-https://github.com/USERNAME/USERNAME/settings/secrets/actions/PROFILE_TOKEN
+https://github.com/USERNAME/USERNAME/settings/secrets/actions/new
 ```
 
 (Substitute the literal username into the URL.)
 
-Tell the user to click "Update secret", paste the token from Step 5,
-and click "Update secret" again to save.
+Tell the user to enter `PROFILE_TOKEN` as the name, paste the token
+from Step 5, and click "Add secret".
 
 Wait for the user to confirm before continuing.
 
