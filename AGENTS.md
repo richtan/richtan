@@ -82,40 +82,30 @@ will need it in the next step. Remind them the token is only shown once.
 
 ### Step 6: Set secret and configure
 
-Tell the user to add the token as a repository secret named
-`PROFILE_TOKEN`. Give them both options:
+Create the secret with a placeholder value:
 
-**Option A — GitHub web UI (recommended):**
+```sh
+gh secret set PROFILE_TOKEN --repo "USERNAME/USERNAME" --body "placeholder"
+```
+
+(Substitute the literal username.)
+
+Then direct the user to update it with their real token:
 
 ```
-https://github.com/USERNAME/USERNAME/settings/secrets/actions/new
+https://github.com/USERNAME/USERNAME/settings/secrets/actions/PROFILE_TOKEN
 ```
 
 (Substitute the literal username into the URL.)
 
-Instructions:
-1. Open the link
-2. Name: `PROFILE_TOKEN`
-3. Secret: paste the token from Step 5
-4. Click "Add secret"
+Tell the user to click "Update secret", paste the token from Step 5,
+and click "Update secret" again to save.
 
-**Option B — CLI in their terminal:**
-
-```
-gh secret set PROFILE_TOKEN --repo USERNAME/USERNAME
-```
-
-It will prompt them to paste the token interactively.
-
-**Do NOT run `gh secret set` yourself** — the Bash tool has no TTY, so
-the interactive prompt will hang.
-
-Wait for the user to confirm the secret was set before continuing.
+Wait for the user to confirm before continuing.
 
 If the user pastes the token into the chat despite instructions, warn
 them that the token was exposed in the conversation, recommend they
-revoke it and generate a new one, then proceed with one of the methods
-above.
+revoke it and generate a new one, then direct them to the URL above.
 
 Then ask the user for their timezone (default: `America/New_York`).
 If non-default:
