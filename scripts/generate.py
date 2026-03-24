@@ -117,12 +117,15 @@ def main():
         if vl > 80:
             print(f"WARNING: Line {i+1} is {vl} visual chars (max 80): {line[:60]}...")
 
-    # Build the full <pre> block
+    # Hash the profile data content BEFORE the timestamp lines so that
+    # timestamp-only changes don't produce a different hash.  This prevents
+    # no-op commits when the underlying profile data hasn't actually changed.
+    content_for_hash = "\n".join(output_lines[:-2])  # exclude timestamp + powered-by lines
+    new_hash = hashlib.sha256(content_for_hash.encode("utf-8")).hexdigest()[:16]
+
+    # Build the full <pre> block (includes timestamp)
     content = "\n".join(output_lines)
     rendered = f"<pre>{content}\n</pre>"
-
-    # Hash check (hash of rendered content, excluding hash comment itself)
-    new_hash = hashlib.sha256(rendered.encode("utf-8")).hexdigest()[:16]
 
     # Read existing README
     print(f"Reading {README_PATH}...")

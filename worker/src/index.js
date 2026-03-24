@@ -214,6 +214,12 @@ export default {
         return new Response("OK", { status: 200 });
       }
 
+      // Ignore events triggered by bots to prevent feedback loops
+      // (e.g. github-actions[bot] pushing profile updates should not re-trigger)
+      if (payload.sender && payload.sender.type === "Bot") {
+        return new Response("OK", { status: 200 });
+      }
+
       // Forward to Durable Object for debounce + rate limit
       const id = env.DEBOUNCER.idFromName("singleton");
       const stub = env.DEBOUNCER.get(id);
