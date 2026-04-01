@@ -1,5 +1,5 @@
 <!-- PROFILE START -->
-<!-- hash:76558a8135588c11 -->
+<!-- hash:d35b967e47608c1e -->
 <pre>┌─────────────────────────────────────┐  ┌─────────────────────────────────────┐
 │ <a href="https://github.com/PurdueRCAC/OOD-Dashboard"><b>PurdueRCAC/OOD-Dashboard</b></a>            │  │ <a href="https://github.com/richtan/ouro"><b>ouro</b></a>                                │
 │ An improved Open OnDemand dashboard │  │ Pay for compute over HTTP. No       │
@@ -8,18 +8,18 @@
 │ JavaScript                ★ 12  ⑂ 1 │  │ Python                              │
 └─────────────────────────────────────┘  └─────────────────────────────────────┘
 ┌─────────────────────────────────────┐  ┌─────────────────────────────────────┐
-│ <a href="https://github.com/richtan/pdfnotes"><b>pdfnotes</b></a>                            │  │ <a href="https://github.com/richtan/relayer"><b>relayer</b></a>                             │
-│ Analyze your PDFs with AI built-in  │  │ The physical layer for AI agents    │
+│ <a href="https://github.com/richtan/pdfnotes"><b>pdfnotes</b></a>                            │  │ <a href="https://github.com/richtan/preprompt"><b>preprompt</b></a>                           │
+│ Analyze your PDFs with AI built-in  │  │ Test any prompt on every AI tool    │
 │                                     │  │                                     │
 │                                     │  │                                     │
-│ TypeScript                          │  │ Solidity                            │
+│ TypeScript                          │  │ TypeScript                          │
 └─────────────────────────────────────┘  └─────────────────────────────────────┘
 ┌─────────────────────────────────────┐  ┌─────────────────────────────────────┐
-│ <a href="https://github.com/richtan/handsoff"><b>handsoff</b></a>                            │  │ <a href="https://github.com/richtan/richtan"><b>richtan</b></a>                             │
-│ Improve your productivity through   │  │ My automated text-based GitHub      │
-│ hands-free laptop control           │  │ profile README                      │
+│ <a href="https://github.com/richtan/relayer"><b>relayer</b></a>                             │  │ <a href="https://github.com/richtan/richtan"><b>richtan</b></a>                             │
+│ The physical layer for AI agents    │  │ My automated text-based GitHub      │
+│                                     │  │ profile README                      │
 │                                     │  │                                     │
-│ Python                              │  │ Python                              │
+│ Solidity                            │  │ Python                              │
 └─────────────────────────────────────┘  └─────────────────────────────────────┘
 
 
@@ -42,20 +42,22 @@
 
 <b>March</b> 2026 ─────────────────────────────────────────────────────────────
 
-  Created 229 commits in 6 repositories
+  Created 320 commits in 7 repositories
   ├─ <a href="https://github.com/richtan/ouro">richtan/ouro</a> ·················································· 141
+  ├─ <a href="https://github.com/richtan/preprompt">richtan/preprompt</a> ·············································· 91
   ├─ <a href="https://github.com/richtan/richtan">richtan/richtan</a> ················································ 54
   ├─ <a href="https://github.com/richtan/mpprouter">richtan/mpprouter</a> ·············································· 16
   ├─ <a href="https://github.com/richtan/pdfnotes">richtan/pdfnotes</a> ················································ 9
   ├─ <a href="https://github.com/richtan/relayer">richtan/relayer</a> ················································· 5
   └─ <a href="https://github.com/richtan/paypertoken">richtan/paypertoken</a> ············································· 4
 
-  Created 3 repositories
+  Created 4 repositories
+  ├─ <a href="https://github.com/richtan/preprompt">richtan/preprompt</a> ·········································· Mar 28
   ├─ <a href="https://github.com/richtan/paypertoken">richtan/paypertoken</a> ········································ Mar 19
   ├─ <a href="https://github.com/richtan/mpprouter">richtan/mpprouter</a> ·········································· Mar 19
   └─ <a href="https://github.com/richtan/richtan">richtan/richtan</a> ············································ Mar 17
 
-  118 contributions in private repositories ············· Mar 2 – Mar 31
+  26 contributions in private repositories ·············· Mar 2 – Mar 31
 
 <b>February</b> 2026 ──────────────────────────────────────────────────────────
 
@@ -79,7 +81,7 @@
   39 contributions in private repositories ·············· Jan 3 – Jan 29
 
 
-<b>Last updated: 2026-03-31 22:01 EDT</b>
+<b>Last updated: 2026-04-01 01:15 EDT</b>
 <b>Powered by <a href="https://github.com/richtan/richtan">richtan/richtan</a></b>
 </pre>
 <!-- PROFILE END -->
