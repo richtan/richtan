@@ -1,25 +1,25 @@
 <!-- PROFILE START -->
-<!-- hash:dd4f7ba3644fa281 -->
+<!-- hash:9184749c37c3b5f2 -->
 <pre>┌─────────────────────────────────────┐  ┌─────────────────────────────────────┐
-│ <a href="https://github.com/PurdueRCAC/OOD-Dashboard"><b>PurdueRCAC/OOD-Dashboard</b></a>            │  │ <a href="https://github.com/richtan/ouro"><b>ouro</b></a>                                │
-│ An improved Open OnDemand dashboard │  │ Pay for compute over HTTP. No       │
-│ for HPC clusters                    │  │ accounts. Just USDC.                │
+│ <a href="https://github.com/richtan/ouro"><b>ouro</b></a>                                │  │ <a href="https://github.com/richtan/preprompt"><b>preprompt</b></a>                           │
+│ Pay for compute over HTTP. No       │  │ Test any prompt on every AI tool    │
+│ accounts. Just USDC.                │  │                                     │
 │                                     │  │                                     │
-│ JavaScript                ★ 12  ⑂ 1 │  │ Python                              │
+│ Python                              │  │ TypeScript                          │
 └─────────────────────────────────────┘  └─────────────────────────────────────┘
 ┌─────────────────────────────────────┐  ┌─────────────────────────────────────┐
-│ <a href="https://github.com/richtan/pdfnotes"><b>pdfnotes</b></a>                            │  │ <a href="https://github.com/richtan/preprompt"><b>preprompt</b></a>                           │
-│ Analyze your PDFs with AI built-in  │  │ Test any prompt on every AI tool    │
+│ <a href="https://github.com/PurdueRCAC/OOD-Dashboard"><b>PurdueRCAC/OOD-Dashboard</b></a>            │  │ <a href="https://github.com/richtan/mpprouter"><b>mpprouter</b></a>                           │
+│ An improved Open OnDemand dashboard │  │ Intelligent MPP service router —    │
+│ for HPC clusters                    │  │ auto-routes to cheapest provider,   │
 │                                     │  │                                     │
+│ JavaScript                ★ 12  ⑂ 1 │  │ TypeScript                          │
+└─────────────────────────────────────┘  └─────────────────────────────────────┘
+┌─────────────────────────────────────┐  ┌─────────────────────────────────────┐
+│ <a href="https://github.com/richtan/richietan.dev"><b>richietan.dev</b></a>                       │  │ <a href="https://github.com/richtan/quickdeploy"><b>quickdeploy</b></a>                         │
+│ My personal website                 │  │ Automatic deployment tool based on  │
+│                                     │  │ Stripe Projects                     │
 │                                     │  │                                     │
 │ TypeScript                          │  │ TypeScript                          │
-└─────────────────────────────────────┘  └─────────────────────────────────────┘
-┌─────────────────────────────────────┐  ┌─────────────────────────────────────┐
-│ <a href="https://github.com/richtan/relayer"><b>relayer</b></a>                             │  │ <a href="https://github.com/richtan/richtan"><b>richtan</b></a>                             │
-│ The physical layer for AI agents    │  │ My automated text-based GitHub      │
-│                                     │  │ profile README                      │
-│                                     │  │                                     │
-│ Solidity                            │  │ Python                              │
 └─────────────────────────────────────┘  └─────────────────────────────────────┘
 
 
@@ -42,15 +42,17 @@
 
 <b>April</b> 2026 ─────────────────────────────────────────────────────────────
 
-  Created 61 commits in 3 repositories
+  Created 84 commits in 4 repositories
   ├─ <a href="https://github.com/richtan/richietan.dev">richtan/richietan.dev</a> ·········································· 52
+  ├─ <a href="https://github.com/richtan/quickdeploy">richtan/quickdeploy</a> ············································ 23
   ├─ <a href="https://github.com/richtan/preprompt">richtan/preprompt</a> ··············································· 5
   └─ <a href="https://github.com/richtan/resume">richtan/resume</a> ·················································· 4
 
-  Created 1 repository
+  Created 2 repositories
+  ├─ <a href="https://github.com/richtan/quickdeploy">richtan/quickdeploy</a> ········································· Apr 5
   └─ <a href="https://github.com/richtan/richietan.dev">richtan/richietan.dev</a> ······································· Apr 4
 
-  68 contributions in private repositories ·············· Apr 1 – Apr 26
+  44 contributions in private repositories ·············· Apr 1 – Apr 26
 
 <b>March</b> 2026 ─────────────────────────────────────────────────────────────
 
@@ -79,7 +81,7 @@
   25 contributions in private repositories ·············· Feb 1 – Feb 26
 
 
-<b>Last updated: 2026-04-26 21:09 EDT</b>
+<b>Last updated: 2026-04-27 15:21 EDT</b>
 <b>Powered by <a href="https://github.com/richtan/richtan">richtan/richtan</a></b>
 </pre>
 <!-- PROFILE END -->
