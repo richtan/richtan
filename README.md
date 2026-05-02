@@ -1,5 +1,5 @@
 <!-- PROFILE START -->
-<!-- hash:b3e0f3d91bf3faeb -->
+<!-- hash:607bbca0cfdfee46 -->
 <pre>┌─────────────────────────────────────┐  ┌─────────────────────────────────────┐
 │ <a href="https://github.com/richtan/ouro"><b>ouro</b></a>                                │  │ <a href="https://github.com/richtan/preprompt"><b>preprompt</b></a>                           │
 │ Pay for compute over HTTP. No       │  │ Test any prompt on every AI tool    │
@@ -23,7 +23,7 @@
 └─────────────────────────────────────┘  └─────────────────────────────────────┘
 
 
-<b>1100 contributions in the last year</b>
+<b>1101 contributions in the last year</b>
 
 ┌────────────────────────────────────────────────────────────┐
 │      May  Jun Jul Aug  Sep Oct Nov  Dec Jan  Feb Mar Apr   │
@@ -33,12 +33,17 @@
 │ Wed   ·░░··░░░░▒··░░·····░···░·░·········░░···░░·░·░░░▓░░▒ │
 │      ··░·▒··░░·░▒·░·········░···░····░···░░·░░·░░▒░█·░░·░░ │
 │ Fri  ··░░··▒░···░·····░·····░▒···░··░······░·░░··▓·█····░· │
-│      ··░·░·▒▒█░··░··░···▒░▒▒·········░·░░··░·░░░▒▒░▒█▓··░· │
+│      ··░·░·▒▒█░··░··░···▒░▒▒·········░·░░··░·░░░▒▒░▒█▓··░░ │
 │                                                            │
 │        Less · ░ ▒ ▓ █ More                                 │
 └────────────────────────────────────────────────────────────┘
 
 <b>Contribution Activity</b>
+
+<b>May</b> 2026 ───────────────────────────────────────────────────────────────
+
+  Created 1 repository
+  └─ <a href="https://github.com/richtan/pi-tldr">richtan/pi-tldr</a> ············································· May 2
 
 <b>April</b> 2026 ─────────────────────────────────────────────────────────────
 
@@ -70,19 +75,10 @@
   Created 1 repository
   └─ <a href="https://github.com/richtan/preprompt">richtan/preprompt</a> ·········································· Mar 28
 
-  26 contributions in private repositories ·············· Mar 2 – Mar 31
-
-<b>February</b> 2026 ──────────────────────────────────────────────────────────
-
-  Created 26 commits in 3 repositories
-  ├─ <a href="https://github.com/richtan/ouro">richtan/ouro</a> ··················································· 13
-  ├─ <a href="https://github.com/richtan/relayer">richtan/relayer</a> ················································ 10
-  └─ <a href="https://github.com/richtan/pdfnotes">richtan/pdfnotes</a> ················································ 3
-
-  25 contributions in private repositories ·············· Feb 1 – Feb 26
+  25 contributions in private repositories ·············· Mar 2 – Mar 31
 
 
-<b>Last updated: 2026-05-01 22:09 EDT</b>
+<b>Last updated: 2026-05-02 18:12 EDT</b>
 <b>Powered by <a href="https://github.com/richtan/richtan">richtan/richtan</a></b>
 </pre>
 <!-- PROFILE END -->
