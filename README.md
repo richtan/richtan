@@ -1,5 +1,5 @@
 <!-- PROFILE START -->
-<!-- hash:998f9ce97252fd37 -->
+<!-- hash:99d0643bcd8d7e71 -->
 <pre>┌─────────────────────────────────────┐  ┌─────────────────────────────────────┐
 │ <a href="https://github.com/richtan/ouro"><b>ouro</b></a>                                │  │ <a href="https://github.com/richtan/preprompt"><b>preprompt</b></a>                           │
 │ Pay for compute over HTTP. No       │  │ Test any prompt on every AI tool    │
@@ -8,29 +8,29 @@
 │ Python                              │  │ TypeScript                          │
 └─────────────────────────────────────┘  └─────────────────────────────────────┘
 ┌─────────────────────────────────────┐  ┌─────────────────────────────────────┐
-│ <a href="https://github.com/PurdueRCAC/OOD-Dashboard"><b>PurdueRCAC/OOD-Dashboard</b></a>            │  │ <a href="https://github.com/richtan/mpprouter"><b>mpprouter</b></a>                           │
-│ An improved Open OnDemand dashboard │  │ Intelligent MPP service router —    │
-│ for HPC clusters                    │  │ auto-routes to cheapest provider,   │
+│ <a href="https://github.com/PurdueRCAC/OOD-Dashboard"><b>PurdueRCAC/OOD-Dashboard</b></a>            │  │ <a href="https://github.com/richtan/richietan.dev"><b>richietan.dev</b></a>                       │
+│ An improved Open OnDemand dashboard │  │ My personal website                 │
+│ for HPC clusters                    │  │                                     │
 │                                     │  │                                     │
 │ JavaScript                ★ 12  ⑂ 1 │  │ TypeScript                          │
 └─────────────────────────────────────┘  └─────────────────────────────────────┘
 ┌─────────────────────────────────────┐  ┌─────────────────────────────────────┐
-│ <a href="https://github.com/richtan/richietan.dev"><b>richietan.dev</b></a>                       │  │ <a href="https://github.com/richtan/quickdeploy"><b>quickdeploy</b></a>                         │
-│ My personal website                 │  │ Automatic deployment tool based on  │
-│                                     │  │ Stripe Projects                     │
+│ <a href="https://github.com/richtan/quickdeploy"><b>quickdeploy</b></a>                         │  │ <a href="https://github.com/richtan/pi-tldr"><b>pi-tldr</b></a>                             │
+│ Automatic deployment tool based on  │  │ A live summary box for pi           │
+│ Stripe Projects                     │  │                                     │
 │                                     │  │                                     │
 │ TypeScript                          │  │ TypeScript                          │
 └─────────────────────────────────────┘  └─────────────────────────────────────┘
 
 
-<b>1122 contributions in the last year</b>
+<b>1109 contributions in the last year</b>
 
 ┌────────────────────────────────────────────────────────────┐
 │         Jun Jul Aug  Sep Oct Nov  Dec Jan  Feb Mar Apr May │
-│      ▒░··░▒░·░·····░·░·····░·░░·░░░····░░░░░···▒▓·░▓░·░░░· │
+│       ░··░▒░·░·····░·░·····░·░░·░░░····░░░░░···▒▓·░▓░·░░░· │
 │ Mon  ··░░░▒···░░·▒···░·····░·····░░·····░·░·░·░░·▒░██░··░· │
 │      ░···░··▒░▒▒··░············░░▒···░····░░·░·░·▓░░▒░░·░· │
-│ Wed  ░░··░░░░▒··░░·····░···░·░·········░░···░░·░·░░░▓░░▒▒  │
+│ Wed  ░░··░░░░▒··░░·····░···░·░·········░░···░░·░·░░░▓░░▒▒· │
 │      ░·▒··░░·░▒·░·········░···░····░···░░·░░·░░▒░█·░░·░░·  │
 │ Fri  ░░··▒░···░·····░·····░▒···░··░······░·░░··▓·█····░·░  │
 │      ░·░·▒▒█░··░··░···▒░▒▒·········░·░░··░·░░░▒▒░▒█▓··░░·  │
@@ -83,7 +83,7 @@
   24 contributions in private repositories ·············· Mar 2 – Mar 31
 
 
-<b>Last updated: 2026-05-11 22:30 EDT</b>
+<b>Last updated: 2026-05-12 22:36 EDT</b>
 <b>Powered by <a href="https://github.com/richtan/richtan">richtan/richtan</a></b>
 </pre>
 <!-- PROFILE END -->
