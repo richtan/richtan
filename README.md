@@ -1,26 +1,26 @@
 <!-- PROFILE START -->
-<!-- hash:4e3b7b43a4a71d67 -->
+<!-- hash:27d37f4c3f5f0256 -->
 <pre>┌─────────────────────────────────────┐  ┌─────────────────────────────────────┐
-│ <a href="https://github.com/richtan/ouro"><b>ouro</b></a>                                │  │ <a href="https://github.com/richtan/preprompt"><b>preprompt</b></a>                           │
-│ Pay for compute over HTTP. No       │  │ Test any prompt on every AI tool    │
-│ accounts. Just USDC.                │  │                                     │
-│                                     │  │                                     │
-│ Python                              │  │ TypeScript                          │
-└─────────────────────────────────────┘  └─────────────────────────────────────┘
-┌─────────────────────────────────────┐  ┌─────────────────────────────────────┐
-│ <a href="https://github.com/PurdueRCAC/OOD-Dashboard"><b>PurdueRCAC/OOD-Dashboard</b></a>            │  │ <a href="https://github.com/richtan/richietan.dev"><b>richietan.dev</b></a>                       │
-│ An improved Open OnDemand dashboard │  │ My personal website                 │
+│ <a href="https://github.com/PurdueRCAC/OOD-Dashboard"><b>PurdueRCAC/OOD-Dashboard</b></a>            │  │ <a href="https://github.com/richtan/pi-tldr"><b>pi-tldr</b></a>                             │
+│ An improved Open OnDemand dashboard │  │ A live summary box for pi           │
 │ for HPC clusters                    │  │                                     │
 │                                     │  │                                     │
 │ JavaScript                ★ 12  ⑂ 1 │  │ TypeScript                          │
 └─────────────────────────────────────┘  └─────────────────────────────────────┘
 ┌─────────────────────────────────────┐  ┌─────────────────────────────────────┐
-│ <a href="https://github.com/richtan/quickdeploy"><b>quickdeploy</b></a>                         │  │ <a href="https://github.com/richtan/pi-tldr"><b>pi-tldr</b></a>                             │
-│ Automatic deployment tool based on  │  │ A live summary box for pi           │
-│ Stripe Projects                     │  │                                     │
+│ <a href="https://github.com/richtan/richietan.dev"><b>richietan.dev</b></a>                       │  │ <a href="https://github.com/richtan/ouro"><b>ouro</b></a>                                │
+│ My personal website                 │  │ Pay for compute over HTTP. No       │
+│                                     │  │ accounts. Just USDC.                │
 │                                     │  │                                     │
-│ TypeScript                          │  │ TypeScript                          │
+│ TypeScript                          │  │ Python                              │
 └─────────────────────────────────────┘  └─────────────────────────────────────┘
+┌─────────────────────────────────────┐
+│ <a href="https://github.com/richtan/preprompt"><b>preprompt</b></a>                           │
+│ Test any prompt on every AI tool    │
+│                                     │
+│                                     │
+│ TypeScript                          │
+└─────────────────────────────────────┘
 
 
 <b>1115 contributions in the last year</b>
@@ -83,7 +83,7 @@
   24 contributions in private repositories ·············· Mar 2 – Mar 31
 
 
-<b>Last updated: 2026-05-14 21:20 EDT</b>
+<b>Last updated: 2026-05-14 22:05 EDT</b>
 <b>Powered by <a href="https://github.com/richtan/richtan">richtan/richtan</a></b>
 </pre>
 <!-- PROFILE END -->
