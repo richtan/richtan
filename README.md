@@ -1,5 +1,5 @@
 <!-- PROFILE START -->
-<!-- hash:3da2cea2c3feba8c -->
+<!-- hash:25d482fae8ecedbb -->
 <pre>┌─────────────────────────────────────┐  ┌─────────────────────────────────────┐
 │ <a href="https://github.com/PurdueRCAC/OOD-Dashboard"><b>PurdueRCAC/OOD-Dashboard</b></a>            │  │ <a href="https://github.com/richtan/pi-tldr"><b>pi-tldr</b></a>                             │
 │ An improved Open OnDemand dashboard │  │ Live summary tool for pi            │
@@ -14,13 +14,13 @@
 │                                     │  │                                     │
 │ TypeScript                          │  │ Python                              │
 └─────────────────────────────────────┘  └─────────────────────────────────────┘
-┌─────────────────────────────────────┐
-│ <a href="https://github.com/richtan/preprompt"><b>preprompt</b></a>                           │
-│ Test any prompt on every AI tool    │
-│                                     │
-│                                     │
-│ TypeScript                          │
-└─────────────────────────────────────┘
+┌─────────────────────────────────────┐  ┌─────────────────────────────────────┐
+│ <a href="https://github.com/richtan/preprompt"><b>preprompt</b></a>                           │  │ <a href="https://github.com/richtan/skills"><b>skills</b></a>                              │
+│ Test any prompt on every AI tool    │  │ My agent skills                     │
+│                                     │  │                                     │
+│                                     │  │                                     │
+│ TypeScript                          │  │                                     │
+└─────────────────────────────────────┘  └─────────────────────────────────────┘
 
 
 <b>1117 contributions in the last year</b>
@@ -42,13 +42,15 @@
 
 <b>May</b> 2026 ───────────────────────────────────────────────────────────────
 
-  Created 31 commits in 1 repository
-  └─ <a href="https://github.com/richtan/pi-tldr">richtan/pi-tldr</a> ················································ 31
+  Created 33 commits in 2 repositories
+  ├─ <a href="https://github.com/richtan/pi-tldr">richtan/pi-tldr</a> ················································ 31
+  └─ <a href="https://github.com/richtan/skills">richtan/skills</a> ·················································· 2
 
-  Created 1 repository
+  Created 2 repositories
+  ├─ <a href="https://github.com/richtan/skills">richtan/skills</a> ·············································· May 6
   └─ <a href="https://github.com/richtan/pi-tldr">richtan/pi-tldr</a> ············································· May 2
 
-  15 contributions in private repositories ··············· May 4 – May 8
+  12 contributions in private repositories ··············· May 4 – May 5
 
 <b>April</b> 2026 ─────────────────────────────────────────────────────────────
 
@@ -83,7 +85,7 @@
   24 contributions in private repositories ·············· Mar 2 – Mar 31
 
 
-<b>Last updated: 2026-05-14 22:08 EDT</b>
+<b>Last updated: 2026-05-14 22:46 EDT</b>
 <b>Powered by <a href="https://github.com/richtan/richtan">richtan/richtan</a></b>
 </pre>
 <!-- PROFILE END -->
