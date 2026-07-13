@@ -1,5 +1,5 @@
 <!-- PROFILE START -->
-<!-- hash:ef0613d88e1e07d3 -->
+<!-- hash:9d046702e722a434 -->
 <pre>┌─────────────────────────────────────┐  ┌─────────────────────────────────────┐
 │ <a href="https://github.com/PurdueRCAC/OOD-Dashboard"><b>PurdueRCAC/OOD-Dashboard</b></a>            │  │ <a href="https://github.com/richtan/pi-tldr"><b>pi-tldr</b></a>                             │
 │ An improved Open OnDemand dashboard │  │ Live summary tool for pi            │
@@ -23,11 +23,11 @@
 └─────────────────────────────────────┘  └─────────────────────────────────────┘
 
 
-<b>926 contributions in the last year</b>
+<b>932 contributions in the last year</b>
 
 ┌────────────────────────────────────────────────────────────┐
 │        Aug  Sep Oct Nov  Dec Jan  Feb Mar Apr May  Jun Jul │
-│      ·····░·░·····░·░░·░░▒····░░░░░···▓█·░█▒·░▒░·······░·· │
+│      ·····░·░·····░·░░·░░▒····░░░░░···▓█·░█▒·░▒░·······░·░ │
 │ Mon  ░░·▒···▒·····░·····▒░·····░·░·░·░░·▓░██▒··▒··░······· │
 │      ▒▓··░············▒░▒···░····░░·░·░·█░░▒░░·░··░···░··  │
 │ Wed  ··░░·····░···░·░·········░░···░░·▒·░░░▓░░▒▒░····░···  │
@@ -39,6 +39,14 @@
 └────────────────────────────────────────────────────────────┘
 
 <b>Contribution Activity</b>
+
+<b>July</b> 2026 ──────────────────────────────────────────────────────────────
+
+  Created 5 commits in 1 repository
+  └─ <a href="https://github.com/richtan/cpcalendar">richtan/cpcalendar</a> ·············································· 5
+
+  Created 1 repository
+  └─ <a href="https://github.com/richtan/cpcalendar">richtan/cpcalendar</a> ········································· Jul 12
 
 <b>June</b> 2026 ──────────────────────────────────────────────────────────────
 
@@ -58,25 +66,8 @@
 
   16 contributions in private repositories ·············· May 4 – May 26
 
-<b>April</b> 2026 ─────────────────────────────────────────────────────────────
 
-  Created 93 commits in 6 repositories
-  ├─ <a href="https://github.com/richtan/richietan.dev">richtan/richietan.dev</a> ·········································· 52
-  ├─ <a href="https://github.com/richtan/quickdeploy">richtan/quickdeploy</a> ············································ 23
-  ├─ <a href="https://github.com/richtan/envmint">richtan/envmint</a> ················································· 8
-  ├─ <a href="https://github.com/richtan/preprompt">richtan/preprompt</a> ··············································· 5
-  ├─ <a href="https://github.com/richtan/resume">richtan/resume</a> ·················································· 4
-  └─ <a href="https://github.com/spamathur/StarkHacks2026">spamathur/StarkHacks2026</a> ········································ 1
-
-  Created 3 repositories
-  ├─ <a href="https://github.com/richtan/envmint">richtan/envmint</a> ············································ Apr 29
-  ├─ <a href="https://github.com/richtan/quickdeploy">richtan/quickdeploy</a> ········································· Apr 5
-  └─ <a href="https://github.com/richtan/richietan.dev">richtan/richietan.dev</a> ······································· Apr 4
-
-  46 contributions in private repositories ·············· Apr 1 – Apr 30
-
-
-<b>Last updated: 2026-07-12 22:09 EDT</b>
+<b>Last updated: 2026-07-12 22:46 EDT</b>
 <b>Powered by <a href="https://github.com/richtan/richtan">richtan/richtan</a></b>
 </pre>
 <!-- PROFILE END -->
